@@ -1,7 +1,8 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,12 +50,44 @@ public class Portfolio implements Serializable{
 		
 	}
 	@OneToOne
-	private User users;	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="portfolios")
-	private Set<Bond> bonds ;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="portfolios")
-	private Set<Stock> stocks ;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="portfolios")
-	private Set<Option> options ;
+	private User user;	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="portfolio")
+	private List<Bond> bonds ;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="portfolio")
+	private List<Stock> stocks ;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="portfolio")
+	private List<Option> options ;
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<Bond> getBonds() {
+		return bonds;
+	}
+
+	public void setBonds(List<Bond> bonds) {
+		this.bonds = bonds;
+	}
+
+	public List<Stock> getStocks() {
+		return stocks;
+	}
+
+	public void setStocks(List<Stock> stocks) {
+		this.stocks = stocks;
+	}
+
+	public List<Option> getOptions() {
+		return options;
+	}
+
+	public void setOptions(List<Option> options) {
+		this.options = options;
+	}
+	
 	
 }

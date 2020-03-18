@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ public class Complain implements Serializable {
 	@Column(name="SUBJECT")
 	private String subject;
 	@Column(name="STATE")
+	@Enumerated(EnumType.STRING)
 	private State state;
 	public int getId_Reclamation() {
 		return id_Reclamation;
@@ -67,5 +70,14 @@ public class Complain implements Serializable {
 	}
 	public Complain() {}
 	@ManyToOne	
-	private User users;
+	private User user;
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
+	
 }

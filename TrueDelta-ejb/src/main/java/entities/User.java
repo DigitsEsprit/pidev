@@ -1,11 +1,13 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,12 +36,14 @@ public class User implements Serializable{
 @Column(name="ADRESSE")
 	private String adresse ;
 @Column(name="ROLE")
+@Enumerated(EnumType.STRING)
 	private Role role;
 //client
 @Column(name="RIB")
 private int rib;
 //AM
 @Column(name="CLASSIFICATION")
+@Enumerated(EnumType.STRING)
 private Classification classification; 
 //broker
 @Column(name="BOURSE")
@@ -128,13 +132,13 @@ public User(int id_user, String first_name, String last_name, String email, int 
 public User() {
 
 }
-@OneToMany(cascade = CascadeType.ALL, mappedBy="users")
-private Set<Contract> Contracts;
-@OneToOne(mappedBy="users")
+@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+private List<Contract> Contracts;
+@OneToOne(mappedBy="user")
 private Portfolio portfolio;
-@OneToMany(cascade = CascadeType.ALL, mappedBy="users")
-private Set<Complain> complains;
-@OneToMany(cascade = CascadeType.ALL, mappedBy="users")
-private Set<Feedback> feedbacks;
+@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+private List<Complain> complains;
+@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+private List<Feedback> feedbacks;
 
 }

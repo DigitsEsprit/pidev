@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,6 +36,7 @@ public class Bond implements Serializable {
 	@Column(name="REFUND_VALUE")
 	private double refund_value;
 	@Column(name="BOND_TYPE")
+	@Enumerated(EnumType.STRING)
 	private BondType bond_type;
 	@Column(name="MARKET_TYPE")
 	private MarketType market_type ;
@@ -132,7 +135,21 @@ public class Bond implements Serializable {
 	}
 	public Bond() {}
 	@ManyToOne	
-	private Portfolio portfolios;
+	private Portfolio portfolio;
 	@ManyToOne	
-	private Company companies;
+	private Company company;
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
+	public Company getCompany() {
+		return company;
+	}
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+	
+	
 }

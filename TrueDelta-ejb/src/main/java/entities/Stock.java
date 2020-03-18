@@ -96,7 +96,20 @@ public class Stock implements Serializable {
 	
 	public Stock() {}
 	@ManyToOne	
-	private Portfolio portfolios;
+	private Portfolio portfolio;
 	@ManyToOne	
-	private Company companies;
+	private Company company;
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
+	public Company getCompany() {
+		return company;
+	}
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+	
 }

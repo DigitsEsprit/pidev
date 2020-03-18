@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ public class Option implements Serializable{
 	@Column(name="VOLATILITY")
 	private double volatility;
 	@Column(name="TYPE")
+	@Enumerated(EnumType.STRING)
 	private OptionType type;
 	@Column(name="START_DAY")
 	private Date start_day;
@@ -106,8 +109,21 @@ public class Option implements Serializable{
 		
 	}
 	@ManyToOne	
-	private Portfolio portfolios;
+	private Portfolio portfolio;
 	@ManyToOne	
-	private Company companies;
+	private Company company;
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
+	public Company getCompany() {
+		return company;
+	}
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+	
 	
 }

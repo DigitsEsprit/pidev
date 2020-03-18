@@ -58,5 +58,12 @@ public class Feedback implements Serializable{
 	}
 	public Feedback() {}
 	@ManyToOne	
-	private User users;
+	private User user;
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 }

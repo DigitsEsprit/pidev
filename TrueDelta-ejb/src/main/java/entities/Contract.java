@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ public class Contract implements Serializable {
 	@Column(name="END_DATE")
 	private Date end_date;
 	@Column(name="CONTRACT_TYPE")
+	@Enumerated(EnumType.STRING)
 	private ContractType contract_type;
 	@Column(name="RISK")
 	private double risk;
@@ -135,5 +138,12 @@ public class Contract implements Serializable {
 	}
 	
 	@ManyToOne	
-	private User users;
+	private User user;
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+		
 }

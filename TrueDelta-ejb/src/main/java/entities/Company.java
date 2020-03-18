@@ -1,7 +1,8 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -67,10 +68,30 @@ public class Company implements Serializable{
 		this.sector = sector;
 	}
 	public Company() {}
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="companies")
-	private Set<Bond> bonds ;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="companies")
-	private Set<Stock> stocks ;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="companies")
-	private Set<Option> options ;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="company")
+	private List<Bond> bonds ;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="company")
+	private List<Stock> stocks ;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="company")
+	private List<Option> options ;
+	public List<Bond> getBonds() {
+		return bonds;
+	}
+	public void setBonds(List<Bond> bonds) {
+		this.bonds = bonds;
+	}
+	public List<Stock> getStocks() {
+		return stocks;
+	}
+	public void setStocks(List<Stock> stocks) {
+		this.stocks = stocks;
+	}
+	public List<Option> getOptions() {
+		return options;
+	}
+	public void setOptions(List<Option> options) {
+		this.options = options;
+	}
+	
+	
 }
