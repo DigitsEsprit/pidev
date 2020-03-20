@@ -10,7 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import entities.User;
-import services_locals.IUserServiceLocal;
+import interfaces.IUserServiceLocal;
 
 @Stateless
 

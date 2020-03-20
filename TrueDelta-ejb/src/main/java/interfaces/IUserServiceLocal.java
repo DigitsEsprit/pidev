@@ -1,4 +1,4 @@
-package services_locals;
+package interfaces;
 
 import javax.ejb.Local;
 import java.util.List;
