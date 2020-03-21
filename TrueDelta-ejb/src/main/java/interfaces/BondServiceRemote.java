@@ -11,5 +11,6 @@ public interface BondServiceRemote {
 	public void deleteBond(int id);
 	public void updateBond(Bond bond);
 	public double CoupnCalcul(Bond bond); 
+	public double actualRateOfReturnBond(Bond bond);
 
 }
