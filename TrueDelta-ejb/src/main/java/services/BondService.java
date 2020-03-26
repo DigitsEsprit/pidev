@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import entities.Bond;
+import entities.BondType;
 import interfaces.BondServiceLocal;
 import interfaces.BondServiceRemote;
 
@@ -36,5 +37,32 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		cc=(c/bond.getNominal_value())*100;
 		return cc;
 	}
+
+	@Override
+	public double actualRateOfReturnBond(Bond bond) {
+		
+		double cours_boursier = 10 ;
+		double rendement_coupon, actualReturn=0,issuePrice=0;
+		issuePrice=(bond.getIssue_price()*100)/bond.getNominal_value();
+		
+		rendement_coupon= (CoupnCalcul(bond)/cours_boursier)*100;
+		
+		
+		if(bond.getBond_type()==BondType.with_coupns) {
+			
+			if(issuePrice>100) {
+				
+				actualReturn=rendement_coupon-(issuePrice-100)/bond.getMaturity();
+				
+			}
+			else
+			{actualReturn=rendement_coupon+(100-issuePrice)/bond.getMaturity();}
+		}
+		
+		return actualReturn;
+		
+	}
+	
+	
 
 }

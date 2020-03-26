@@ -39,6 +39,7 @@ public class Bond implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private BondType bond_type;
 	@Column(name="MARKET_TYPE")
+	@Enumerated(EnumType.STRING)
 	private MarketType market_type ;
 	@Column(name="CREDITOR")
 	private String bond_creditor;
