@@ -1,9 +1,18 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ejb.Stateless;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -12,17 +21,17 @@ import javax.persistence.TypedQuery;
 import entities.User;
 import interfaces.IUserServiceLocal;
 
-@Stateless
 
+@Stateless
 public class UserService implements IUserServiceLocal {
-EntityManager em;
-@PersistenceContext
-@Override
-public User verifyLoginCredentials(String email, String password) {
+	@PersistenceContext(unitName="TrueDelta-ejb")
+	EntityManager em;
+
+	@Override
+	public User verifyLoginCredentials(String email, String password) {
 	System.out.println("from ejb : "+email + " "+password);
 	Query query = em.createQuery("select u from User u where u.username = :username AND u.password = :password").setParameter("email",email).setParameter("password", password);
 	if(!query.getResultList().isEmpty()) {
-		
 		User user = (User) query.getResultList().get(0);
 		System.out.println("from ejb, user found, authenticating user with id :"+user.getId_user());
 		return user;
@@ -31,7 +40,7 @@ public User verifyLoginCredentials(String email, String password) {
 	return null;}
     @Override	
     public int addUser(User user) {
-    	System.out.println("aading:"+user);
+    	System.out.println("adding:"+user);
 		em.persist(user);
 		return user.getId_user();
 	}
@@ -143,9 +152,64 @@ public User verifyLoginCredentials(String email, String password) {
 			System.out.println("incorrect e-mail");
 		
 		return false;
+	}
+	@Override
+	public void sendMailFP(String email) {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		  props.put("mail.smtp.starttls.enable", "true");
+		  props.put("mail.smtp.auth", "true");
+		  props.put("mail.smtp.port", "587");
+	    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+	    	@Override
+	    	   protected PasswordAuthentication getPasswordAuthentication() {
+	    	    return new PasswordAuthentication("mohamedwejih.sbai@esprit.tn", "WEJIHSBAI96");
+	    	   }
+	    });
+
+	    try {
+	        MimeMessage msg = new MimeMessage(session);
+	        
+	        msg.setFrom(new InternetAddress("mohamedwejih.sbai@esprit.tn"));
+	        msg.setRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
+	        msg.setSubject("Forgetten password");
+	        msg.setSentDate(new Date());
+	        msg.setText("Change your password here:");
+	        Transport.send(msg);
+	    } catch (MessagingException mex) {
+	        System.out.println("send failed, exception: " + mex);
+	    }
+		
+	}
+	@Override
+	public void sendMailSecurity(String email) {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		  props.put("mail.smtp.starttls.enable", "true");
+		  props.put("mail.smtp.auth", "true");
+		  props.put("mail.smtp.port", "587");
+	    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+	    	@Override
+	    	   protected PasswordAuthentication getPasswordAuthentication() {
+	    	    return new PasswordAuthentication("mohamedwejih.sbai@esprit.tn", "WEJIHSBAI96");
+	    	   }
+	    });
+
+	    try {
+	        MimeMessage msg = new MimeMessage(session);
+	        
+	        msg.setFrom(new InternetAddress("mohamedwejih.sbai@esprit.tn"));
+	        msg.setRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
+	        msg.setSubject("Secure your account");
+	        msg.setSentDate(new Date());
+	        msg.setText("There is an unknown connexion with this IPAdress and Location");
+	        Transport.send(msg);
+	    } catch (MessagingException mex) {
+	        System.out.println("send failed, exception: " + mex);
+		
 	}	
 }
-		
+}	
 	
 	
 	
