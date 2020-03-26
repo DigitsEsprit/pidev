@@ -38,6 +38,10 @@
          <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
       </license>
    </licenses>
+   <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
 
    <dependencies>
 
@@ -62,6 +66,7 @@
          <artifactId>cdi-api</artifactId>
          <scope>provided</scope>
       </dependency>
+      <dependency> <groupId>javax</groupId> <artifactId>javaee-api</artifactId> <version>7.0</version> </dependency>
       
       <!-- Import the JSF API, we use provided scope as the API is included in JBoss WildFly -->
       <dependency>

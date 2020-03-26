@@ -1,11 +1,12 @@
 package interfaces;
 
 import javax.ejb.Local;
+
+
 import java.util.List;
 
 
 import entities.User;
-
 
 @Local
 public interface IUserServiceLocal {
@@ -21,4 +22,8 @@ public interface IUserServiceLocal {
 	public User authenticationAM(String email, String password);
 	public User authenticationInverstors(String email, String password);
 	public boolean isValid(String email);
+	//mdp oublié
+	public void sendMailFP(String email);
+	//adresseip location
+	public void sendMailSecurity(String email);
 }
