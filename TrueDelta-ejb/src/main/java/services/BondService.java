@@ -1,5 +1,7 @@
 package services;
 
+import java.awt.List;
+
 import javax.ejb.Stateful;
 
 import javax.persistence.EntityManager;
@@ -39,13 +41,13 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	}
 
 	@Override
-	public double actualRateOfReturnBond(Bond bond) {
+	public double actualRateOfReturnBond(Bond bond, double coursBoursier) {
 		
-		double cours_boursier = 10 ;
+		//double cours_boursier = 10 ;
 		double rendement_coupon, actualReturn=0,issuePrice=0;
 		issuePrice=(bond.getIssue_price()*100)/bond.getNominal_value();
 		
-		rendement_coupon= (CoupnCalcul(bond)/cours_boursier)*100;
+		rendement_coupon= (CoupnCalcul(bond)/coursBoursier)*100;
 		
 		
 		if(bond.getBond_type()==BondType.with_coupns) {
@@ -61,6 +63,21 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		
 		return actualReturn;
 		
+	}
+
+	@Override
+	public Bond findBondById(int id) {
+		
+		Bond bond=em.find(Bond.class, id);
+		return bond;
+	}
+
+	@Override
+	public List findAllBonds() {
+		
+		List bonds=(List) em.createQuery("fron Bond",Bond.class).getResultList();
+		
+		return bonds;
 	}
 	
 	
