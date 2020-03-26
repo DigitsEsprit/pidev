@@ -3,6 +3,8 @@
 	<name>TrueDelta-ear</name>
 	<comment></comment>
 	<projects>
+		<project>TrueDelta2-ejb</project>
+		<project>TrueDelta2-web</project>
 		<project>TrueDelta-ejb</project>
 		<project>TrueDelta-web</project>
 	</projects>
