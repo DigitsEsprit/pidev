@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 
 import entities.Bond;
 import entities.BondType;
+import entities.MarketType;
 import interfaces.BondServiceLocal;
 import interfaces.BondServiceRemote;
 
@@ -27,11 +28,7 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	public void deleteBond(int id) {		
 		em.remove(em.find(Bond.class, id));	
 	}
-	@Override
-	public void updateBond(Bond bond) {		
-		Bond bond1=em.find(Bond.class, bond.getId_bond());
-		bond1.setBond_creditor(bond.getBond_creditor());		
-	}
+	
 	@Override
 	public double CoupnCalcul(Bond bond) {		
 		double cc,c;
@@ -75,9 +72,39 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	@Override
 	public List findAllBonds() {
 		
-		List bonds=(List) em.createQuery("fron Bond",Bond.class).getResultList();
+		List bonds=(List) em.createQuery("from Bond",Bond.class).getResultList();
 		
 		return bonds;
+	}
+
+	@Override
+	public void updateBond(int IdBond, String creditor) {
+		
+		Bond bond = em.find(Bond.class, IdBond);
+		bond.setBond_creditor(creditor);
+		
+	}
+
+	@Override
+	public double BondYieldCalcul(Bond bond) {
+		
+		double p=0;
+		double cf=bond.getNominal_rate()/2;
+		if(bond.getMarket_type()==MarketType.primary_market) {
+		for (int i = 1; i < bond.getBond_nsemesters()-1; i++) {
+			p=cf/Math.pow((1+(bond.getBond_maturity_yield()/200)),i);
+			
+		}
+		p=p+((cf+100)/Math.pow((1+(bond.getBond_maturity_yield()/200)),bond.getBond_nsemesters()));
+		}
+		else
+			for (int i = 1; i < bond.getBond_nsemesters(); i++) {
+				p=cf/Math.pow((1+(bond.getBond_maturity_yield()/200)),i);
+				
+			}
+			
+		
+		return p;
 	}
 	
 	
