@@ -17,6 +17,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name="BONDS")
 public class Bond implements Serializable {
+	
+	//private static final long serialVersionUID = 1421746759512286392L;
+	
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	@Column(name="ID_BOND")
@@ -45,6 +48,23 @@ public class Bond implements Serializable {
 	private String bond_creditor;
 	@Column(name="DEPTOR")
 	private String bond_deptor;
+	@Column(name="NUMBER_OF_SEMESTERS")
+	private int bond_nsemesters;
+	@Column(name="YIELD_TO_MATURITY")
+	private double bond_maturity_yield;
+	
+	public double getBond_maturity_yield() {
+		return bond_maturity_yield;
+	}
+	public void setBond_maturity_yield(double bond_maturity_yield) {
+		this.bond_maturity_yield = bond_maturity_yield;
+	}
+	public int getBond_nsemesters() {
+		return bond_nsemesters;
+	}
+	public void setBond_nsemesters(int bond_nsemesters) {
+		this.bond_nsemesters = bond_nsemesters;
+	}
 	public int getId_bond() {
 		return id_bond;
 	}
@@ -117,11 +137,11 @@ public class Bond implements Serializable {
 	public void setBond_deptor(String bond_deptor) {
 		this.bond_deptor = bond_deptor;
 	}
-	public Bond(int id_bond, double nominal_value, double issue_price, Date date_of_isssue, int maturity,
+	public Bond( double nominal_value, double issue_price, Date date_of_isssue, int maturity,
 			double nominal_rate, int days_next_coupn, double refund_value, BondType bond_type, MarketType market_type,
-			String bond_creditor, String bond_deptor) {
-		super();
-		this.id_bond = id_bond;
+			String bond_creditor, String bond_deptor,int bond_nsemesters,double bond_maturity_yield) {
+		//super();
+		//this.id_bond = id_bond;
 		this.nominal_value = nominal_value;
 		this.issue_price = issue_price;
 		this.date_of_isssue = date_of_isssue;
@@ -133,6 +153,9 @@ public class Bond implements Serializable {
 		this.market_type = market_type;
 		this.bond_creditor = bond_creditor;
 		this.bond_deptor = bond_deptor;
+		this.bond_nsemesters=bond_nsemesters;
+		this.bond_maturity_yield=bond_maturity_yield;
+		
 	}
 	public Bond() {}
 	@ManyToOne	
