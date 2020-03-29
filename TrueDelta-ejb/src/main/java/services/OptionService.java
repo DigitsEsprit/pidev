@@ -47,10 +47,6 @@ EntityManager em;
 		}
 	
 
-	
-
-
-
 	@Override
 	public Option findOptionById(int id) {
 		Option option = em.find(Option.class, id);
@@ -59,12 +55,8 @@ EntityManager em;
 
  @Override
 	public double findTaux(int id){
-		
-	//User user=findUserById(id);
 		Contract c = em.createQuery(" select a from Contract a where a.user.id_user = 1", Contract.class).getSingleResult();
-		//query.setParameter("user", id);
-		//Contract c = query.getSingleResult();
-		double taux=c.getGain();
+	double taux=c.getGain();
 		return taux;
 	
 	}
