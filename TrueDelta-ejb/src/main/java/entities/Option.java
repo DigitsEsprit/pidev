@@ -23,8 +23,8 @@ public class Option implements Serializable{
 	private int id_Option;
 	@Column(name="STRIKE")
 	private double strike;
-	@Column(name="PRIME")
-	private double prime;
+	@Column(name="PRICE")
+	private double price;
 	@Column(name="VOLATILITY")
 	private double volatility;
 	@Column(name="TYPE")
@@ -34,13 +34,28 @@ public class Option implements Serializable{
 	private Date start_day;
 	@Column(name="END_DAY")
 	private Date end_day;
-	@Column(name="DURATION")
+	@Column(name="DURATION",nullable=false)
 	private double duration;
 	@Column(name="DESCRIPTION")
 	private String description;
+	@Column(name="TTYPE")
+	@Enumerated(EnumType.STRING)
+	private Ttype ttype;
 	public int getId_Option() {
 		return id_Option;
 	}
+	
+	
+	public Ttype getTtype() {
+		return ttype;
+	}
+
+
+	public void setTtype(Ttype ttype) {
+		this.ttype = ttype;
+	}
+
+
 	public void setId_Option(int id_Option) {
 		this.id_Option = id_Option;
 	}
@@ -50,12 +65,8 @@ public class Option implements Serializable{
 	public void setStrike(double strike) {
 		this.strike = strike;
 	}
-	public double getPrime() {
-		return prime;
-	}
-	public void setPrime(double prime) {
-		this.prime = prime;
-	}
+	
+	
 	public double getVolatility() {
 		return volatility;
 	}
@@ -64,6 +75,12 @@ public class Option implements Serializable{
 	}
 	public OptionType getType() {
 		return type;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
 	}
 	public void setType(OptionType type) {
 		this.type = type;
@@ -92,17 +109,21 @@ public class Option implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Option(int id_Option, double strike, double prime, double volatility, OptionType type, Date start_day,
+	public Option(int id_Option, double strike, double price, double volatility, OptionType type, Date start_day,
 			Date end_day, double duration, String description) {
 		super();
 		this.id_Option = id_Option;
 		this.strike = strike;
-		this.prime = prime;
+		this.price = price;
 		this.volatility = volatility;
 		this.type = type;
 		this.start_day = start_day;
 		this.end_day = end_day;
 		this.duration = duration;
+		this.description = description;
+	}
+	public Option(String description) {
+		super();
 		this.description = description;
 	}
 	public Option() {

@@ -27,9 +27,15 @@ public class User implements Serializable{
 	private String first_name ;
 @Column(name="LAST_NAME")
 	private String last_name ;
+public User(String first_name, int phone_number, int rib) {
+	super();
+	this.first_name = first_name;
+	this.phone_number = phone_number;
+	this.rib = rib;
+}
 @Column(name="E_MAIL")
 	private String email;
-@Column(name="PHONE_NUMBER")
+@Column(name="PHONE_NUMBER",nullable=false)
 	private int phone_number ;
 @Column(name="PASSWORD")
 	private String password ;
@@ -39,7 +45,7 @@ public class User implements Serializable{
 @Enumerated(EnumType.STRING)
 	private Role role;
 //client
-@Column(name="RIB")
+@Column(name="RIB",nullable=false)
 private int rib;
 //AM
 @Column(name="CLASSIFICATION")
