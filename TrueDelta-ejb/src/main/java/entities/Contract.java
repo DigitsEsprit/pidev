@@ -145,5 +145,9 @@ public class Contract implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public Contract(String description) {
+		super();
+		this.description = description;
+	}
 		
 }
