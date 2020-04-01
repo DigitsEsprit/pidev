@@ -1,5 +1,7 @@
 package interfaces;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -14,7 +16,8 @@ public interface OptionServiceRemote  {
 	public void removeOption(int id) ;
 	public Option findOptionById(int id) ;
 	public User findUserById(int id) ;
-//	public double BlackAndScholes(int id);
+	public double BlackAndScholes(int id,int id2);
     public  double findTaux(int id) ;
-    public double loiNormale(double d);
+   
+  
 }
