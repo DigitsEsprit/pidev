@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name="COMPLAINS")
 public class Complain implements Serializable {
@@ -30,6 +29,13 @@ public class Complain implements Serializable {
 	@Column(name="STATE")
 	@Enumerated(EnumType.STRING)
 	private State state;
+	@Column(name = "assignmentDate")
+	private Date assignmentDate;
+	@Column(name = "closingDate")
+	private Date closingDate;
+	
+	private static final long serialVersionUID = -558553967080513790L;
+
 	public int getId_Reclamation() {
 		return id_Reclamation;
 	}
@@ -60,6 +66,23 @@ public class Complain implements Serializable {
 	public void setState(State state) {
 		this.state = state;
 	}
+	
+	public Date getAssignmentDate() {
+		return assignmentDate;
+	}
+
+	public void setAssignmentDate(Date assignmentDate) {
+		this.assignmentDate = assignmentDate;
+	}
+
+	public Date getClosingDate() {
+		return closingDate;
+	}
+
+	public void setClosingDate(Date closingDate) {
+		this.closingDate = closingDate;
+	}
+	
 	public Complain(int id_Reclamation, String description, Date date, String subject, State state) {
 		super();
 		this.id_Reclamation = id_Reclamation;
@@ -68,6 +91,23 @@ public class Complain implements Serializable {
 		this.subject = subject;
 		this.state = state;
 	}
+	
+	public Complain(String description,Date date, String subject, State state) {
+		super();
+		this.description = description;
+		this.date = date;
+		this.subject = subject;
+		this.state = state;
+
+	}
+	public Complain(String description,String subject,State state) {
+		super();
+		this.description = description;
+		this.subject = subject;
+		this.state = state;
+
+	}
+	
 	public Complain() {}
 	@ManyToOne	
 	private User user;
