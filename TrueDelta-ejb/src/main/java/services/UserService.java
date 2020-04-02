@@ -16,8 +16,9 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
+
+import entities.Role;
 import entities.User;
 import interfaces.IUserServiceLocal;
 
@@ -30,7 +31,7 @@ public class UserService implements IUserServiceLocal {
 	@Override
 	public User verifyLoginCredentials(String email, String password) {
 	System.out.println("from ejb : "+email + " "+password);
-	Query query = em.createQuery("select u from User u where u.username = :username AND u.password = :password").setParameter("email",email).setParameter("password", password);
+	Query query = em.createQuery("select u from User u where u.email=:email AND u.password=:password").setParameter("email",email).setParameter("password", password);
 	if(!query.getResultList().isEmpty()) {
 		User user = (User) query.getResultList().get(0);
 		System.out.println("from ejb, user found, authenticating user with id :"+user.getId_user());
@@ -45,51 +46,39 @@ public class UserService implements IUserServiceLocal {
 		return user.getId_user();
 	}
 	@Override
-	public void deleteUser(int Id_user) {
-		User user = em.find(User.class,Id_user);
+	public int deleteUser(int id_user) {
+		User user = em.find(User.class,id_user);
 		if (user !=null) {
 			em.remove(user);
 		}
+		return 1;
 		}
 	@Override
 	public String searchUser(String first_name) {
 		User user = em.createQuery("select u from User where u.first_name=first_name", User.class).getSingleResult();
 		return user.getFirst_name();
 	}
-	@Override
-	public void updateUser(int id_user,String email,int phone_number,String password,String adresse,int rib,String bourse) {
-		Query query = em.createQuery("update User u set u.email=:email,u.phone_number=:phone_number,u.password=:password,u.adresse=:adresse,"
-				+ "u.rib=:rib,u.bourse=:bourse  where u.id_user=:id_user");
-				query.setParameter("email", email);
-				query.setParameter("phone_number", phone_number);
-				query.setParameter("password", password);
-				query.setParameter("adresse", adresse);
-				query.setParameter("rib", rib);
-				query.setParameter("bourse", bourse);
-				query.setParameter("id_user", id_user);
-				int m=query.executeUpdate();
-			    if (m==1) {
-			    	System.out.println("updated successfully");}
-			    	else {
-			    		System.out.println("failed to update");
-			    }
-	}
-			    
-	
+			 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAllInvestors() {
-		TypedQuery<User> query = em.createQuery("Select u from User where u.Role='investor'",User.class);		
-		return query.getResultList();
+		Query query = em.createQuery("Select u from User u where u.role=:role",User.class);		
+		query.setParameter("role", Role.investor);
+		return (List<User>)query.getResultList();
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAllAM() {
-		TypedQuery<User> query = em.createQuery("Select u from User where u.Role='asset_manager'",User.class);		
-		return query.getResultList();
+		Query query = em.createQuery("Select u from User u where u.role=:role",User.class);		
+		query.setParameter("role", Role.asset_manager);
+		return (List<User>)query.getResultList();
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAllBrokers() {
-		TypedQuery<User> query = em.createQuery("Select u from User where u.Role='broker'",User.class);		
-		return query.getResultList();
+		Query query = em.createQuery("Select u from User u where u.role=:role",User.class);		
+		query.setParameter("role", Role.broker);
+		return (List<User>)query.getResultList();
 	}
 	@SuppressWarnings("unused")
 	@Override
@@ -157,9 +146,10 @@ public class UserService implements IUserServiceLocal {
 	public void sendMailFP(String email) {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
-		  props.put("mail.smtp.starttls.enable", "true");
-		  props.put("mail.smtp.auth", "true");
-		  props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 	    	@Override
 	    	   protected PasswordAuthentication getPasswordAuthentication() {
@@ -174,7 +164,7 @@ public class UserService implements IUserServiceLocal {
 	        msg.setRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
 	        msg.setSubject("Forgetten password");
 	        msg.setSentDate(new Date());
-	        msg.setText("Change your password here:");
+	        msg.setText("Change your password here: http://localhost:9080/TrueDelta-web/truedelta/authentication?token=xxxxxxxxxxxxxxxxxxxxx&email=imencherifw@gmail.com");
 	        Transport.send(msg);
 	    } catch (MessagingException mex) {
 	        System.out.println("send failed, exception: " + mex);
@@ -185,9 +175,10 @@ public class UserService implements IUserServiceLocal {
 	public void sendMailSecurity(String email) {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
-		  props.put("mail.smtp.starttls.enable", "true");
-		  props.put("mail.smtp.auth", "true");
-		  props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 	    	@Override
 	    	   protected PasswordAuthentication getPasswordAuthentication() {
@@ -209,6 +200,25 @@ public class UserService implements IUserServiceLocal {
 		
 	}	
 }
+	@Override
+	public int updateUser(User user, int id_user) {
+		Query query =  em.createQuery("update User u set email=:email , phone_number=:phone_number , password=:password , adresse=:adresse , rib=:rib , bourse=:bourse where u.id_user=:id_user ");
+		query.setParameter("email", user.getEmail());
+		query.setParameter("phone_number", user.getPhone_number());
+		query.setParameter("password", user.getPassword());
+		query.setParameter("adresse", user.getAdresse());
+		query.setParameter("rib", user.getRib());
+		query.setParameter("bourse", user.getBourse());
+		query.setParameter("id_user", id_user);
+		int m=query.executeUpdate();
+	   return m;
+	    }
+	@Override
+	public User getUserByName(String email) {
+		return (User) em.createQuery("select u from User u where u.email=:email").setParameter("email", email).getResultList().get(0);
+	}
+	
+	
 }	
 	
 	

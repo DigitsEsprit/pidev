@@ -1,10 +1,8 @@
 package services;
 
 import javax.ejb.Stateful;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import entities.Bond;
 import entities.BondType;
 import interfaces.BondServiceLocal;
