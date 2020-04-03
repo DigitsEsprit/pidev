@@ -111,11 +111,19 @@ public class Complain implements Serializable {
 	public Complain() {}
 	@ManyToOne	
 	private User user;
+	@ManyToOne
+	User admin;
 	public User getUser() {
 		return user;
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public User getAdmin() {
+		return admin;
+	}
+	public void setAdmin(User admin) {
+		this.admin = admin;
 	}
 	
 	
