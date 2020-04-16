@@ -59,6 +59,15 @@
          <artifactId>jaxrs-api</artifactId>
          <scope>provided</scope>
       </dependency>
+      <dependency>
+
+<groupId>io.jsonwebtoken</groupId>
+
+<artifactId>jjwt</artifactId>
+
+<version>0.2</version>
+
+</dependency>
 
       <!-- Import the CDI API, we use provided scope as the API is included in JBoss WildFly -->
       <dependency>

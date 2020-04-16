@@ -3,10 +3,8 @@ package services;
 import java.awt.List;
 
 import javax.ejb.Stateful;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import entities.Bond;
 import entities.BondType;
 import entities.MarketType;

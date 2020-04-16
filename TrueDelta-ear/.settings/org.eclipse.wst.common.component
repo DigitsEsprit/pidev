@@ -8,6 +8,12 @@
         <dependent-module archiveName="TrueDelta-ejb.jar" deploy-path="/" handle="module:/resource/TrueDelta-ejb/TrueDelta-ejb">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="bcrypt.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/at/favre/lib/bcrypt/0.2.0/bcrypt-0.2.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="bytes.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/at/favre/lib/bytes/0.4.6/bytes-0.4.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="javax.mail.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/sun/mail/javax.mail/1.5.1/javax.mail-1.5.1.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
