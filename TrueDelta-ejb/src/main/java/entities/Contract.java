@@ -44,6 +44,14 @@ public class Contract implements Serializable {
 	private double percentage_AM;
 	@Column(name="CAPITAL")
 	private double capital;
+	@Column(name="SCORE")
+	private int score;
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
 	public int getId_Contract() {
 		return id_Contract;
 	}
@@ -145,5 +153,43 @@ public class Contract implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public Contract(String description) {
+		super();
+		this.description = description;
+	}
+	public Contract(String description, double gain, double percentage_AM, double capital) {
+		super();
+		this.description = description;
+		this.gain = gain;
+		this.percentage_AM = percentage_AM;
+		this.capital = capital;
+		
+	}
+	public Contract(String description, ContractType contract_type) {
+		super();
+		this.description = description;
+		this.contract_type = contract_type;
+		
+	}
+	public Contract(String description, ContractType contract_type, double risk, String signature, double gain,
+			double percentage_client, double percentage_broker, double percentage_AM, double capital) {
+		super();
+		this.description = description;
+		this.contract_type = contract_type;
+		this.risk = risk;
+		this.signature = signature;
+		this.gain = gain;
+		this.percentage_client = percentage_client;
+		this.percentage_broker = percentage_broker;
+		this.percentage_AM = percentage_AM;
+		this.capital = capital;
+	}
+	public Contract(String description, ContractType contract_type, double gain) {
+		super();
+		this.description = description;
+		this.contract_type = contract_type;
+		this.gain = gain;
+	}
+	
 		
 }
