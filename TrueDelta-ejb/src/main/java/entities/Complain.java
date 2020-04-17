@@ -111,8 +111,8 @@ public class Complain implements Serializable {
 	public Complain() {}
 	@ManyToOne	
 	private User user;
-	@ManyToOne
-	User admin;
+	private User admin;
+	private User investor;
 	public User getUser() {
 		return user;
 	}
@@ -125,6 +125,15 @@ public class Complain implements Serializable {
 	public void setAdmin(User admin) {
 		this.admin = admin;
 	}
+	public User getInvestor() {
+		return investor;
+	}
+	public void setInvestor(User investor) {
+		this.investor = investor;
+	}
+	
+	
+	
 	
 	
 	

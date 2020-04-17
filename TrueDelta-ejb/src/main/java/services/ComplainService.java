@@ -4,7 +4,10 @@ package services;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -16,20 +19,20 @@ import entities.User;
 import interfaces.IComplainServiceRemote;
 
 @Stateful
+@LocalBean
 public class ComplainService implements IComplainServiceRemote {
 	
 	@PersistenceContext(unitName="TrueDelta-ejb")
 	
 	EntityManager em;
+	Mail_API mail;
 
-	
 	@Override
-	public int AddComplaint(Complain complaint , int id_user) {	
-		User user = em.find(User.class, id_user); 
-
-		  if(user!=null)
+	public int AddComplaint(Complain complaint , int id_investor) {	
+		 User investor = em.find(User.class, id_investor); 
+	        if(investor.getRole()==Role.investor)
           {
-			  complaint.setUser(user);
+			  complaint.setUser(investor);
 
           em.persist(complaint);
           return 1;
@@ -102,13 +105,61 @@ public class ComplainService implements IComplainServiceRemote {
 	}
 	
 	@Override
-	public List<Complain> SearchComplain(String motclé) {
+	public List<Complain> SearchComplain(String motcle) {
 		TypedQuery<Complain> query = em.createQuery(
 				"select c from Complain c WHERE c.description LIKE :code or c.subject LIKE :code or c.state LIKE :code ORDER BY c.date DESC",
 				Complain.class);
-		query.setParameter("code", "%" + motclé + "%");
+		query.setParameter("code", "%" + motcle + "%");
 		return query.getResultList();
 	}
+	
+
+	
+	@Override
+    public void TreatComplaint(int id_complain, String state,int id_admin) {
+
+        User admin = em.find(User.class, id_admin); 
+        if(admin.getRole()==Role.admin)
+         {
+        Calendar currenttime = Calendar.getInstance();
+        Date now = new Date((currenttime.getTime()).getTime());
+        State st = State.valueOf(state);
+        Complain complain = em.find(Complain.class, id_complain);
+
+        if (st == State.inprogress) {
+            complain.setAssignmentDate(now);
+            complain.setState(st);
+            em.merge(complain);
+
+            try {
+
+                mail.sendMail(complain.getUser().getEmail(), "Your complaint is being processed",
+                        complain.getSubject()+ "  is being processed at" + complain.getAssignmentDate());
+
+            } catch (MessagingException e) {
+                System.out.println("error");
+                e.printStackTrace();
+            }
+        }
+        else if (st == State.treated ) {
+
+            complain.setClosingDate(now);
+            complain.setState(st);
+            em.merge(complain);
+
+            try {
+
+                mail.sendMail(complain.getUser().getEmail(), "Your complaint is treated",
+                        complain.getSubject() + " is treated at " + complain.getClosingDate()
+                                + " with state : " + complain.getState());
+
+            } catch (MessagingException e) {
+                System.out.println("error");
+                e.printStackTrace();
+            }
+        }
+    }
+    }
 	
 	@Override
 	public Complain AffectComplaintsToAdmin(int id) {
@@ -116,7 +167,7 @@ public class ComplainService implements IComplainServiceRemote {
 		Complain c = em.find(Complain.class, id);
 		if(c.getAdmin()==null)
 		{
-		User admin = em.find(User.class, 1); //Session
+		User admin = em.find(User.class, 1); 
 		if(admin.getRole()==Role.admin)
 		 {
 		  c.setAdmin(admin);
@@ -130,29 +181,9 @@ public class ComplainService implements IComplainServiceRemote {
 		}
 		return c;
 	}
+
 	
-	@Override
-	public void TreatComplaint(int id_complain, String state) {
-
-		Calendar currenttime = Calendar.getInstance();
-		Date now = new Date((currenttime.getTime()).getTime());
-		State st = State.valueOf(state);
-		Complain complain = em.find(Complain.class, id_complain);
-
-		if (st == State.inprogress) {
-			complain.setAssignmentDate(now);
-			complain.setState(st);
-			em.merge(complain);
-		
-		}
-		else if (st == State.treated ) {
-
-			complain.setClosingDate(now);
-			complain.setState(st);
-			em.merge(complain);
-			
-		}	
-	}
+	
 
 	
 	
