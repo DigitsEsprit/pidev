@@ -116,10 +116,10 @@ public class ComplainService implements IComplainServiceRemote {
 
 	
 	@Override
-    public void TreatComplaint(int id_complain, String state,int id_admin) {
+    public void TreatComplaint(int id_complain, String state,int id_investor) {
 
-        User admin = em.find(User.class, id_admin); 
-        if(admin.getRole()==Role.admin)
+        User investor = em.find(User.class, id_investor); 
+        if(investor.getRole()==Role.investor)
          {
         Calendar currenttime = Calendar.getInstance();
         Date now = new Date((currenttime.getTime()).getTime());
@@ -160,6 +160,37 @@ public class ComplainService implements IComplainServiceRemote {
         }
     }
     }
+	
+	 @Override
+	    public String verifBadWord(int idRec ) throws InterruptedException
+	    { 
+	    	
+	    Complain complain = em.find(Complain.class, idRec);
+		       String input1= complain.getDescription();
+		       String input2= complain.getSubject();
+		       String  output1 = BadWordFilter.getCensoredText(input1);
+		       String  output2 = BadWordFilter.getCensoredText(input2);
+
+	if (( input1!=output1)||(input2!=output2))
+	    	       
+	{
+		//deleteComplain(idRec);
+		
+		try {
+
+            mail.sendMail(complain.getUser().getEmail(), "Your complaint  was blocked because a bad word was found. If you believe this word should not be blocked, please message support",
+            		complain.getSubject());
+
+        } catch (MessagingException e) {
+            System.out.println("error");
+            e.printStackTrace();
+        }
+			
+		
+	}
+	    	return ("Success");
+	    
+}
 	
 	@Override
 	public Complain AffectComplaintsToAdmin(int id) {
