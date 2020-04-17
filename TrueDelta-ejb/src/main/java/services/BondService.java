@@ -4,14 +4,18 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
-
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 //import javax.ws.rs.client.Client;
 /*import javax.ws.rs.client.*;
 import javax.ws.rs.core.Response;
 */
 import entities.Bond;
+import entities.Portfolio;
+import entities.User;
 //import entities.BondType;
 //import entities.MarketType;
 import interfaces.BondServiceLocal;
@@ -36,8 +40,7 @@ import org.apache.poi.ss.usermodel.Row;
 
 
 
-@Stateful
-@LocalBean
+@Stateless
 public class BondService implements BondServiceLocal, BondServiceRemote {
 	
 	@PersistenceContext(unitName="TrueDelta-ejb")
@@ -49,12 +52,32 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	}
 
 	@Override
-	public void deleteBond(int id) {		
+	public int deleteBond(int id) {		
 		em.remove(em.find(Bond.class, id));	
+		return id;
 	}
 	
 	@Override
-	public double CoupnCalcul(Bond bond , int t) {	
+	public double BondPrice(Bond bond, double r) {
+		
+		double rate = r/bond.getFrequency();
+		double periode=bond.getMaturity()*bond.getFrequency();
+		double payment =bond.getNominal_value()*bond.getNominal_rate()/bond.getFrequency();
+		double future=bond.getNominal_value();
+		
+		
+		/*if (rate == 0) {
+		    return - payment * periode - future;
+		  } else {*/
+	   // return (((-1 + Math.pow(1 + rate, periode)) / rate) * payment * (1 +rate * 1) - future) / Math.pow(1 + rate, periode);
+		
+		return future/(Math.pow((1+rate), periode)+payment*(1+rate)*((Math.pow(1+rate, periode)-1)/rate));
+			
+		 // }
+	}
+	
+	@Override
+	public double CashFlow(Bond bond , int t) {	
 		double c=0;
 		if(t<bond.getMaturity()) {
 		 c= (bond.getNominal_value()*bond.getNominal_rate());
@@ -67,6 +90,17 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		
 				
 	}
+	@Override
+	public double PvCashFlow(Bond bond, int t, double r) {
+		// TODO Auto-generated method stub
+		double pvcf=0;
+		double cf=CashFlow(bond, t);
+		pvcf=cf/Math.pow((1+r/bond.getFrequency()), t);
+		 
+		return pvcf;
+	}
+	
+	
 
 	@Override
 	/* Le taux de rendement actuariel tient compte non seulement des coupons
@@ -78,7 +112,7 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		double res=0;
 			
 		for (int t = 0; t < bond.getMaturity()+1; t++) {
-			res=CoupnCalcul(bond, t)*Math.pow((1-coursBoursier), -t);
+			res=CashFlow(bond, t)*Math.pow((1-coursBoursier), -t);
 			p0=p0+res;
 			
 		}
@@ -148,7 +182,7 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		 
 	    public static void main(String[] args) throws IOException {
 	    	
-	    	FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\rimah\\Desktop\\Bond.xls"));
+	    	FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\rimah\\Desktop\\Bonds.xls"));
 	    	
 	    	HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
 	    	HSSFSheet sheet = workbook.getSheetAt(0);
@@ -223,14 +257,17 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	@Override
 	public double DurationClcul(Bond bond, double r) {
 		
+		double dd=0;
 		double d=0;
-		double cf=0;
+		double pvcf=0;
 		double res=0;
-		for (int t = 1; t < bond.getBond_maturity_yield()+1;t++) {
-			cf=CoupnCalcul(bond, t);
-			res=(t*cf*Math.pow((1-r), -t))/actuarialRateOfReturnBond(bond, r);
-			d=d+res;
+		for (int t = 1; t < bond.getMaturity()+1;t++) {
+			pvcf=PvCashFlow(bond, t, r);
+			res=pvcf*t;
+			dd=dd+res;
+			
 		}
+		d=dd/bond.getIssue_price()/bond.getFrequency();
 		
 		return d;
 	}
@@ -241,11 +278,31 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	public double SensibilityCalcul(Bond bond, double r) {
 		
 		double s=0;
-		s=-DurationClcul(bond, r)*Math.pow((1-r), -1);
-		
+			s=DurationClcul(bond, r)/(1+r/bond.getFrequency());
 		return s;
 		
 	}
+	
+	@Override
+	public double ConvexityCalcul(Bond bond, double r) {
+		
+		double sum=0;
+		double res=0;
+		double coef=0;
+		double conv=0;
+		
+		for(int t=1; t<bond.getMaturity()+1;t++) {
+			
+			res=PvCashFlow(bond, t, r)*(Math.pow(t, 2)+t);
+			sum=sum+res;
+		}
+		
+		coef=1/Math.pow((1+r), 2);
+		conv=(coef*sum)/bond.getIssue_price()/Math.pow(bond.getFrequency(), 2);
+		return conv;
+	}
+
+	
 
 	/*@Override
 	public void Consomation() {
@@ -260,12 +317,25 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		rep.close();
 		
 	}*/
+	
+	@Override
+	public double NbBondPortfolio(Portfolio p) {
+		TypedQuery<Long> query = em.createQuery("select COUNT (b) from Bond b where b.portfolio=:p", Long.class);
+		query.setParameter("p", p);
+		return query.getSingleResult();
+	}
+	
+	@Override
+	public List<Bond> getAllBondsByPortfolio(int idp) {
+		TypedQuery<Bond> query= em.createQuery("Select b from Bond b where b.id_portfolio=:idp",Bond.class);
+		query.setParameter("p",idp);
+		return query.getResultList();
+	}
 
 	@Override
 	public double ScoringBnd(Bond bond) {
 		
-		double s=0;
-		
+		double s=0;		
 		if(bond.getNominal_value()>100000)
 		{      s+=10;      }
 		if(bond.getNominal_rate()>5)
@@ -276,6 +346,10 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		{		s+=20;			}
 		if(actuarialRateOfReturnBond(bond, 0.5)>bond.getNominal_value())
 		{		s+=50;				}
+		if(SensibilityCalcul(bond, 0.5)<0.03)
+		{		s+=20;						}
+		if(DurationClcul(bond, 0.5)>5)
+		{		s+=30;						}
 		
 		return s;
 	}
@@ -285,13 +359,42 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		
 		String c="";
 		
-		if(ScoringBnd(bond)>80)
-			c="good investment";
-		else
-			c="not a good investment";
 		
 		return c;
 	}
+
+	@Override
+	public double getPortfolioCapital(User u) {
+	
+		TypedQuery<Long> query=em.createQuery("select capital c from Portfolio p where p.user:=u",Long.class);
+		return query.getSingleResult();
+	}
+
+	@Override
+	public double ScoringBndPortfolio(int id, User user) {
+		
+		double c=getPortfolioCapital(user);
+		List<Bond> l=getAllBondsByPortfolio(id);
+		double s=0;
+		double res=0;
+		for (Bond bond : l) {
+			res=ScoringBnd(bond);
+			s+=res;
+		}
+		if(c>100000)
+		{s+=20;}
+		
+		return s;
+	}
+
+	
+
+
+
+	
+
+	
+	
 	
 	
 
