@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+//import at.favre.lib.rypto.bcrypt.BCrypt;
 
 
 @SuppressWarnings("serial")
@@ -87,8 +87,8 @@ public String getPassword() {
 	return password;
 }
 public void setPassword(String password) {
-	String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-	this.password = bcryptHashString;
+	//String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+	//this.password = bcryptHashString;
 }
 public String getAdresse() {
 	return adresse;

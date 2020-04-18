@@ -28,9 +28,12 @@ import interfaces.BondServiceRemote;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
- 
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -241,6 +244,10 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	  
 	             }
 	             System.out.println("");
+	             System.out.println("*****************");
+	             Cell c=sheet.getRow(55).getCell(7);
+	             System.out.println(c.getCellTypeEnum());
+	             
 	             
 	    	 }
 	    	 
@@ -389,15 +396,109 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		
 		return s;
 	}
+	
 
+	@Override
+	public List<String> matchingBond1(double montant) throws IOException {
+    	FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\rimah\\Desktop\\Bonds.xls"));
+    	HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+    	HSSFSheet datasheet = workbook.getSheetAt(0);
+    	String s="";
+    	String s1="";
+    	double r=0;
+    	List<String> l = new ArrayList<String>();
+    	for(int i=2;i<76;i++) {
+    		
+    		Cell cell=datasheet.getRow(i).getCell(2);
+		double c=cell.getNumericCellValue();
+    		if(c == montant) {
+    			
+    			for(int j=0; j<10;j++) {
+    				
+    				Cell cell1=datasheet.getRow(i).getCell(j);
+    				CellType cellType = cell1.getCellTypeEnum();
+    				 switch (cellType) {
+	                 case NUMERIC:
+	                     r=cell1.getNumericCellValue();
+	                     s1=String.valueOf(r);
+	                     break;
+	                 case STRING:
+	                     s1=cell1.getStringCellValue();
+	                     break;
+	                 
+    				 }		
+    			s+="    "+s1+"     ";
+    		}
+    				
+    		}
+    			l.add(s);
+    			
+    		}
+    	
+
+		return l;
+	}
+
+	
+	
+	@Override
+	public List<String> matchingBond2(double revenu, double marge) throws IOException {
+		
+		FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\rimah\\Desktop\\Bonds.xls"));
+    	HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+    	HSSFSheet datasheet = workbook.getSheetAt(0);
+    	String s="";
+    	String s1="";
+    	double r=0;
+    	double coup=0;
+    	List<String> l = new ArrayList<String>();
+    	for(int i=2;i<76;i++) {
+    		
+    	Cell cell=datasheet.getRow(i).getCell(2);
+    	Cell celli=datasheet.getRow(i).getCell(7);
+    	Cell cellj=datasheet.getRow(i).getCell(8);
+		double c=cell.getNumericCellValue();
+		double c2=celli.getNumericCellValue();
+		String c3=cellj.getStringCellValue();
+		coup=c*c2;
+		
+    		if(coup<=revenu+marge && coup>=revenu-marge && c3=="taux fixe infine") {
+    			
+    			for(int j=0; j<10;j++) {
+    				
+    				Cell cell1=datasheet.getRow(i).getCell(j);
+    				CellType cellType = cell1.getCellTypeEnum();
+    				 switch (cellType) {
+	                 case NUMERIC:
+	                     r=cell1.getNumericCellValue();
+	                     s1=String.valueOf(r);
+	                     break;
+	                 case STRING:
+	                     s1=cell1.getStringCellValue();
+	                     break;
+	                 
+    				 }		
+    			s+="    "+s1+"     ";
+    		}
+    				
+    		}
+    			l.add(s);
+    			
+    		}
+	
+		
+		
+		return l;
+	}
+
+	
 	
 
 
-
 	
 
 	
-	
+    	
 	
 	
 

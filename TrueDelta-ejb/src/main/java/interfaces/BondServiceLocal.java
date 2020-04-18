@@ -1,5 +1,7 @@
 package interfaces;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -34,6 +36,9 @@ public interface BondServiceLocal {
 	public String ClassificationBond(Bond bond);
 	public double getPortfolioCapital(User u);
 	public double ScoringBndPortfolio(int id, User user);
+	public List<String> matchingBond1(double montant) throws  IOException ;
+	public List<String> matchingBond2(double revenu, double marge) throws  IOException ;
+
 
 
 	

@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -18,7 +19,7 @@ public interface BondServiceRemote {
 		public int deleteBond(int id);
 		public void updateBond(int IdBond, String creditor );
 		public Bond findBondById(int id);
-		public List findAllBonds();
+		public List<Bond> findAllBonds();
 		public String findBondByCreditor(String creditor);
 
 		
@@ -36,6 +37,9 @@ public interface BondServiceRemote {
 		public String ClassificationBond(Bond bond);
 		public double getPortfolioCapital(User u);
 		public double ScoringBndPortfolio(int id, User user);
+		public List<String> matchingBond1(double montant)  throws IOException;
+		public List<String> matchingBond2(double revenu, double marge) throws  IOException ;
+
 		
 
 
