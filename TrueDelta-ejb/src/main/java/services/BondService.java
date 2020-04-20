@@ -1,19 +1,52 @@
 package services;
 
-import java.awt.List;
+import java.util.List;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
+
+import javax.ejb.Stateless;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
+//import javax.ws.rs.client.Client;
+/*import javax.ws.rs.client.*;
+import javax.ws.rs.core.Response;
+*/
 
 import entities.Bond;
-import entities.BondType;
-import entities.MarketType;
+import entities.Portfolio;
+import entities.User;
+//import entities.BondType;
+//import entities.MarketType;
 import interfaces.BondServiceLocal;
 import interfaces.BondServiceRemote;
+//import java.awt.List;
+//package org.o7planning.apachepoiexcel.demo;
 
-@Stateful
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+//import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+
+
+
+
+
+@Stateless
 public class BondService implements BondServiceLocal, BondServiceRemote {
 	
 	@PersistenceContext(unitName="TrueDelta-ejb")
@@ -25,40 +58,71 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	}
 
 	@Override
-	public void deleteBond(int id) {		
+	public int deleteBond(int id) {		
 		em.remove(em.find(Bond.class, id));	
+		return id;
 	}
 	
 	@Override
-	public double CoupnCalcul(Bond bond) {		
-		double cc,c;
-		c=(bond.getNominal_value()*bond.getNominal_rate()*(bond.getDays_next_coupn()+3))/356;
-		cc=(c/bond.getNominal_value())*100;
-		return cc;
+	public double BondPrice(Bond bond, double r) {
+		
+		double rate = r/bond.getFrequency();
+		double periode=bond.getMaturity()*bond.getFrequency();
+		double payment =bond.getNominal_value()*bond.getNominal_rate()/bond.getFrequency();
+		double future=bond.getNominal_value();
+		
+		
+		/*if (rate == 0) {
+		    return - payment * periode - future;
+		  } else {*/
+	   // return (((-1 + Math.pow(1 + rate, periode)) / rate) * payment * (1 +rate * 1) - future) / Math.pow(1 + rate, periode);
+		
+		return future/(Math.pow((1+rate), periode)+payment*(1+rate)*((Math.pow(1+rate, periode)-1)/rate));
+			
+		 // }
 	}
+	
+	@Override
+	public double CashFlow(Bond bond , int t) {	
+		double c=0;
+		if(t<bond.getMaturity()) {
+		 c= (bond.getNominal_value()*bond.getNominal_rate());
+		}
+	
+		else
+		{ c=bond.getNominal_value()+bond.getNominal_value()*bond.getNominal_rate();}
+		
+		return c;
+		
+				
+	}
+	@Override
+	public double PvCashFlow(Bond bond, int t, double r) {
+		// TODO Auto-generated method stub
+		double pvcf=0;
+		double cf=CashFlow(bond, t);
+		pvcf=cf/Math.pow((1+r/bond.getFrequency()), t);
+		 
+		return pvcf;
+	}
+	
+	
 
 	@Override
-	public double actualRateOfReturnBond(Bond bond, double coursBoursier) {
-		
-		//double cours_boursier = 10 ;
-		double rendement_coupon, actualReturn=0,issuePrice=0;
-		issuePrice=(bond.getIssue_price()*100)/bond.getNominal_value();
-		
-		rendement_coupon= (CoupnCalcul(bond)/coursBoursier)*100;
-		
-		
-		if(bond.getBond_type()==BondType.with_coupns) {
+	/* Le taux de rendement actuariel tient compte non seulement des coupons
+	mais également des gains (pertes) en capital que l’investisseur peut réaliser
+	en portant le titre jusqu’à l’échéance. Cette mesure tient compte de la série
+	temporelle des paiements.*/
+	public double actuarialRateOfReturnBond(Bond bond, double coursBoursier) {
+		double p0=0;
+		double res=0;
 			
-			if(issuePrice>100) {
-				
-				actualReturn=rendement_coupon-(issuePrice-100)/bond.getMaturity();
-				
-			}
-			else
-			{actualReturn=rendement_coupon+(100-issuePrice)/bond.getMaturity();}
+		for (int t = 0; t < bond.getMaturity()+1; t++) {
+			res=CashFlow(bond, t)*Math.pow((1-coursBoursier), -t);
+			p0=p0+res;
+			
 		}
-		
-		return actualReturn;
+		return p0;
 		
 	}
 
@@ -72,7 +136,8 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 	@Override
 	public List findAllBonds() {
 		
-		List bonds=(List) em.createQuery("from Bond",Bond.class).getResultList();
+		//List bonds= (List) em.createQuery("select b from Bond b",Bond.class).getResultList();
+		List <Bond> bonds=em.createQuery("select b from Bond b",Bond.class).getResultList();
 		
 		return bonds;
 	}
@@ -85,7 +150,7 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		
 	}
 
-	@Override
+	/*@Override
 	public double BondYieldCalcul(Bond bond) {
 		
 		double p=0;
@@ -105,7 +170,335 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 			
 		
 		return p;
+	}*/
+	//Le taux de rendement courant comme mesure de performance, ne tient pas compte de la valeur temporelle de l’argent, il ne tient compte que ducoupon et d’aucune autre source de revenu.
+	
+
+	@Override
+	public double CurrentYieldBon(Bond bond) {
+		
+		double ipp=(100*bond.getIssue_price())/bond.getNominal_value();
+		
+		double cy= bond.getNominal_rate()/ipp;
+		
+		return cy;
 	}
+	
+	public static class ReadExcelDemo {
+		 
+	    public static void main(String[] args) throws IOException {
+	    	
+	    	FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\rimah\\Desktop\\Bonds.xls"));
+	    	
+	    	HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+	    	HSSFSheet sheet = workbook.getSheetAt(0);
+	    	Iterator<Row> rowIterator = sheet.iterator();
+	    	 System.out.print(rowIterator);
+	    	 while (rowIterator.hasNext()) {
+	             Row row = rowIterator.next();
+	             
+	             Iterator<Cell> cellIterator = row.cellIterator();
+	             
+	             System.out.println(cellIterator);
+	             while (cellIterator.hasNext()) {
+	                 Cell cell = cellIterator.next();
+	  
+	                 // Change to getCellType() if using POI 4.x
+	                 CellType cellType = cell.getCellTypeEnum();
+	  
+	                 switch (cellType) {
+	                 case _NONE:
+	                     System.out.print("");
+	                     System.out.print("\t");
+	                     break;
+	                 case BOOLEAN:
+	                     System.out.print(cell.getBooleanCellValue());
+	                     System.out.print("\t");
+	                     break;
+	                 case BLANK:
+	                     System.out.print("");
+	                     System.out.print("\t");
+	                     break;
+	                 case FORMULA:
+	                     // Formula
+	                     System.out.print(cell.getCellFormula());
+	                     System.out.print("\t");
+	                      
+	                     FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+	                     // Print out value evaluated by formula
+	                     System.out.print(evaluator.evaluate(cell).getNumberValue());
+	                     break;
+	                 case NUMERIC:
+	                     System.out.print(cell.getNumericCellValue());
+	                     System.out.print("\t");
+	                     break;
+	                 case STRING:
+	                     System.out.print(cell.getStringCellValue());
+	                     System.out.print("\t");
+	                     break;
+	                 case ERROR:
+	                     System.out.print("!");
+	                     System.out.print("\t");
+	                     break;
+	                 }
+	  
+	             }
+	             System.out.println("");
+	             System.out.println("*****************");
+	             Cell c=sheet.getRow(55).getCell(7);
+	             System.out.println(c.getCellTypeEnum());
+	             
+	             
+	    	 }
+	    	 
+	 
+	    }
+	}
+
+	@Override
+	public String findBondByCreditor(String creditor) {
+		// TODO Auto-generated method stub
+		Bond bond=em.createQuery("select c ftom Bond where c. bond_creditor=creditor",Bond.class).getSingleResult();
+		
+		return bond.getBond_creditor();
+	}
+	
+	//La duration apparait comme une durée de vie moyenne actualisée de tous les flux (intérêt et capital).
+	@Override
+	public double DurationClcul(Bond bond, double r) {
+		
+		double dd=0;
+		double d=0;
+		double pvcf=0;
+		double res=0;
+		for (int t = 1; t < bond.getMaturity()+1;t++) {
+			pvcf=PvCashFlow(bond, t, r);
+			res=pvcf*t;
+			dd=dd+res;
+			
+		}
+		d=dd/bond.getIssue_price()/bond.getFrequency();
+		
+		return d;
+	}
+	
+	//La sensibilité du taux d’une obligation mesure le pourcentage de variation du prix d’une obligation suite à une variation donnee du taux d’intérêt.
+
+	@Override
+	public double SensibilityCalcul(Bond bond, double r) {
+		
+		double s=0;
+			s=DurationClcul(bond, r)/(1+r/bond.getFrequency());
+		return s;
+		
+	}
+	
+	@Override
+	public double ConvexityCalcul(Bond bond, double r) {
+		
+		double sum=0;
+		double res=0;
+		double coef=0;
+		double conv=0;
+		
+		for(int t=1; t<bond.getMaturity()+1;t++) {
+			
+			res=PvCashFlow(bond, t, r)*(Math.pow(t, 2)+t);
+			sum=sum+res;
+		}
+		
+		coef=1/Math.pow((1+r), 2);
+		conv=(coef*sum)/bond.getIssue_price()/Math.pow(bond.getFrequency(), 2);
+		return conv;
+	}
+
+	
+
+	/*@Override
+	public void Consomation() {
+		
+
+		Client bond=ClientBuilder.newClient();
+		WebTarget  target=bond.target("http://localhost:8081/RestActivator/Bond");
+		WebTarget b=target.path("ok");
+		Response rep=b.request().get();
+		String res=rep.readEntity(String.class);
+		System.out.println(res);
+		rep.close();
+		
+	}*/
+	
+	@Override
+	public double NbBondPortfolio(Portfolio p) {
+		TypedQuery<Long> query = em.createQuery("select COUNT (b) from Bond b where b.portfolio=:p", Long.class);
+		query.setParameter("p", p);
+		return query.getSingleResult();
+	}
+	
+	@Override
+	public List<Bond> getAllBondsByPortfolio(int idp) {
+		TypedQuery<Bond> query= em.createQuery("Select b from Bond b where b.id_portfolio=:idp",Bond.class);
+		query.setParameter("p",idp);
+		return query.getResultList();
+	}
+
+	@Override
+	public double ScoringBnd(Bond bond) {
+		
+		double s=0;		
+		if(bond.getNominal_value()>100000)
+		{      s+=10;      }
+		if(bond.getNominal_rate()>5)
+		{		s+=10;			}
+		if(bond.getNominal_value()>bond.getIssue_price())
+		{		s+=20;			}
+		if(DurationClcul(bond, 0.5)>3)
+		{		s+=20;			}
+		if(actuarialRateOfReturnBond(bond, 0.5)>bond.getNominal_value())
+		{		s+=50;				}
+		if(SensibilityCalcul(bond, 0.5)<0.03)
+		{		s+=20;						}
+		if(DurationClcul(bond, 0.5)>5)
+		{		s+=30;						}
+		
+		return s;
+	}
+
+	@Override
+	public String ClassificationBond(Bond bond) {
+		
+		String c="";
+		
+		
+		return c;
+	}
+
+	@Override
+	public double getPortfolioCapital(User u) {
+	
+		TypedQuery<Long> query=em.createQuery("select capital c from Portfolio p where p.user:=u",Long.class);
+		return query.getSingleResult();
+	}
+
+	@Override
+	public double ScoringBndPortfolio(int id, User user) {
+		
+		double c=getPortfolioCapital(user);
+		List<Bond> l=getAllBondsByPortfolio(id);
+		double s=0;
+		double res=0;
+		for (Bond bond : l) {
+			res=ScoringBnd(bond);
+			s+=res;
+		}
+		if(c>100000)
+		{s+=20;}
+		
+		return s;
+	}
+	
+
+	@Override
+	public List<String> matchingBond1(double montant) throws IOException {
+    	FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\rimah\\Desktop\\Bonds.xls"));
+    	HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+    	HSSFSheet datasheet = workbook.getSheetAt(0);
+    	String s="";
+    	String s1="";
+    	double r=0;
+    	List<String> l = new ArrayList<String>();
+    	for(int i=2;i<76;i++) {
+    		
+    		Cell cell=datasheet.getRow(i).getCell(2);
+		double c=cell.getNumericCellValue();
+    		if(c == montant) {
+    			
+    			for(int j=0; j<10;j++) {
+    				
+    				Cell cell1=datasheet.getRow(i).getCell(j);
+    				CellType cellType = cell1.getCellTypeEnum();
+    				 switch (cellType) {
+	                 case NUMERIC:
+	                     r=cell1.getNumericCellValue();
+	                     s1=String.valueOf(r);
+	                     break;
+	                 case STRING:
+	                     s1=cell1.getStringCellValue();
+	                     break;
+	                 
+    				 }		
+    			s+="    "+s1+"     ";
+    		}
+    				
+    		}
+    			l.add(s);
+    			
+    		}
+    	
+
+		return l;
+	}
+
+	
+	
+	@Override
+	public List<String> matchingBond2(double revenu, double marge) throws IOException {
+		
+		FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\rimah\\Desktop\\Bonds.xls"));
+    	HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+    	HSSFSheet datasheet = workbook.getSheetAt(0);
+    	String s="";
+    	String s1="";
+    	double r=0;
+    	double coup=0;
+    	List<String> l = new ArrayList<String>();
+    	for(int i=2;i<76;i++) {
+    		
+    	Cell cell=datasheet.getRow(i).getCell(2);
+    	Cell celli=datasheet.getRow(i).getCell(7);
+    	Cell cellj=datasheet.getRow(i).getCell(8);
+		double c=cell.getNumericCellValue();
+		double c2=celli.getNumericCellValue();
+		String c3=cellj.getStringCellValue();
+		coup=c*c2;
+		
+    		if(coup<=revenu+marge && coup>=revenu-marge && c3=="taux fixe infine") {
+    			
+    			for(int j=0; j<10;j++) {
+    				
+    				Cell cell1=datasheet.getRow(i).getCell(j);
+    				CellType cellType = cell1.getCellTypeEnum();
+    				 switch (cellType) {
+	                 case NUMERIC:
+	                     r=cell1.getNumericCellValue();
+	                     s1=String.valueOf(r);
+	                     break;
+	                 case STRING:
+	                     s1=cell1.getStringCellValue();
+	                     break;
+	                 
+    				 }		
+    			s+="    "+s1+"     ";
+    		}
+    				
+    		}
+    			l.add(s);
+    			
+    		}
+	
+		
+		
+		return l;
+	}
+
+	
+	
+
+
+	
+
+	
+    	
 	
 	
 

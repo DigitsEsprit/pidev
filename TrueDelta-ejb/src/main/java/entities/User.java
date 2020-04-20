@@ -15,6 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+
+
+//import at.favre.lib.rypto.bcrypt.BCrypt;
+
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="USERS")
@@ -82,7 +87,8 @@ public String getPassword() {
 	return password;
 }
 public void setPassword(String password) {
-	this.password = password;
+	//String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+	//this.password = bcryptHashString;
 }
 public String getAdresse() {
 	return adresse;
@@ -114,6 +120,12 @@ public String getBourse() {
 public void setBourse(String bourse) {
 	this.bourse = bourse;
 }
+
+
+
+public User() {
+
+}
 public User(int id_user, String first_name, String last_name, String email, int phone_number, String password,
 		String adresse, Role role, int rib, Classification classification, String bourse) {
 	super();
@@ -129,9 +141,6 @@ public User(int id_user, String first_name, String last_name, String email, int 
 	this.classification = classification;
 	this.bourse = bourse;
 }
-public User() {
-
-}
 @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
 private List<Contract> Contracts;
 @OneToOne(mappedBy="user")
@@ -140,5 +149,11 @@ private Portfolio portfolio;
 private List<Complain> complains;
 @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
 private List<Feedback> feedbacks;
+
+@Override
+public String toString() {
+	return "User [role=" + role + ", classification=" + classification + "]";
+}
+
 
 }
