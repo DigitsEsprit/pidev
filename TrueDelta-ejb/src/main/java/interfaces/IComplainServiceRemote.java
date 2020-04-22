@@ -1,3 +1,4 @@
+
 package interfaces;
 
 
@@ -20,7 +21,6 @@ public interface IComplainServiceRemote {
 	public Complain AffectComplaintsToAdmin(int id);
     public void TreatComplaint(int id_complain, String state,int id_admin);
     public String verifBadWord(int idRec ) throws InterruptedException;
-  
 
 	}
 

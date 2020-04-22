@@ -174,7 +174,7 @@ public class ComplainService implements IComplainServiceRemote {
 	if (( input1!=output1)||(input2!=output2))
 	    	       
 	{
-		deleteComplain(idRec);
+		//deleteComplain(idRec);
 		
 		try {
 

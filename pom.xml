@@ -125,6 +125,16 @@
     <build>
         <pluginManagement>
             <plugins>
+            
+            <plugin>
+    <groupId>com.reucon.maven.plugins</groupId>
+    <artifactId>maven-openfire-plugin</artifactId>
+    <extensions>true</extensions>
+    <configuration>
+      <javaEncoding>UTF-8</javaEncoding>
+    </configuration>
+    <version>1.0.2-SNAPSHOT</version>
+  </plugin>
                 <!-- The WildFly plugin deploys your ear to a local JBoss
                     AS container -->
                 <!-- Due to Maven's lack of intelligence with EARs we need 
