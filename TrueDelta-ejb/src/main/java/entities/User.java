@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 
 
 //import at.favre.lib.rypto.bcrypt.BCrypt;
@@ -40,6 +42,10 @@ public class User implements Serializable{
 	private String password ;
 @Column(name="ADRESSE")
 	private String adresse ;
+@Column(name="TOKEN")
+private String verifToken;
+@Column(name="IS_VALID")
+private boolean isValid;
 @Column(name="ROLE")
 @Enumerated(EnumType.STRING)
 	private Role role;
@@ -87,8 +93,9 @@ public String getPassword() {
 	return password;
 }
 public void setPassword(String password) {
-	//String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-	//this.password = bcryptHashString;
+	/*String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+	this.password = bcryptHashString;*/
+	this.password =password;
 }
 public String getAdresse() {
 	return adresse;
@@ -123,6 +130,18 @@ public void setBourse(String bourse) {
 
 
 
+public String getVerifToken() {
+	return verifToken;
+}
+public void setVerifToken(String verifToken) {
+	this.verifToken = verifToken;
+}
+public boolean isValid() {
+	return isValid;
+}
+public void setValid(boolean isValid) {
+	this.isValid = isValid;
+}
 public User() {
 
 }
