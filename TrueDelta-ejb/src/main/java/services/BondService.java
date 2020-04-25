@@ -25,7 +25,6 @@ import interfaces.BondServiceLocal;
 import interfaces.BondServiceRemote;
 //import java.awt.List;
 //package org.o7planning.apachepoiexcel.demo;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -489,6 +488,22 @@ public class BondService implements BondServiceLocal, BondServiceRemote {
 		
 		
 		return l;
+	}
+
+	@Override
+	public void affecterBondPortfolio(int bondId, int portfolioId) {
+		Portfolio pem=em.find(Portfolio.class, portfolioId);
+		Bond bem=em.find(Bond.class, bondId);
+		if(pem.getBonds() == null)
+		{ List<Bond> bonds = new ArrayList<>(); 
+		bonds.add(bem);
+		pem.setBonds(bonds); 
+		}
+		else
+		{ pem.getBonds().add(bem);} 
+
+		
+		
 	}
 
 	

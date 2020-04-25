@@ -39,6 +39,8 @@ public interface BondServiceRemote {
 		public double ScoringBndPortfolio(int id, User user);
 		public List<String> matchingBond1(double montant)  throws IOException;
 		public List<String> matchingBond2(double revenu, double marge) throws  IOException ;
+		public void affecterBondPortfolio(int bondId, int portfolioId);
+
 
 		
 
