@@ -81,10 +81,8 @@ public class Stock implements Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public Stock(int id_stock, double open, double high, double low, double close, double adj_close, double volume,
+	public Stock(double open, double high, double low, double close, double adj_close, double volume,
 			Date date) {
-		super();
-		this.id_stock = id_stock;
 		this.open = open;
 		this.high = high;
 		this.low = low;

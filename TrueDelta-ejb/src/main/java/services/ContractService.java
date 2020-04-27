@@ -1,3 +1,4 @@
+
 package services;
 
 import java.awt.List;
@@ -228,6 +229,7 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	
 	}
+}
 	
 	
 	
@@ -246,6 +248,4 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	
 	
-	
-	
-	     	
+		     	

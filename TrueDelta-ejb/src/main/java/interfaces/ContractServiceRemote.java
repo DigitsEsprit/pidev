@@ -22,5 +22,5 @@ public interface ContractServiceRemote {
 	public double CalculGainAsset(Contract con);
 	public int EstimatedScore(Contract contrat,int id);
 	double CalculGainClient(Contract con);
-	int ScoreFinalContratAL(Contract contrat, int id);
-}
+	int ScoreFinalContratAL(Contract contrat, int id); 
+} 

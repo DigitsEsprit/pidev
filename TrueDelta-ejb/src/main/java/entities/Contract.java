@@ -216,6 +216,4 @@ public class Contract implements Serializable {
 	public void setNoticeContract(String noticeContract) {
 		NoticeContract = noticeContract;
 	}
-	
-		
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,6 +25,7 @@ import interfaces.IUserServiceLocal;
 
 
 @Stateless
+@LocalBean
 public class UserService implements IUserServiceLocal {
 	@PersistenceContext(unitName="TrueDelta-ejb")
 	EntityManager em;
@@ -159,12 +161,12 @@ public class UserService implements IUserServiceLocal {
 
 	    try {
 	        MimeMessage msg = new MimeMessage(session);
-	        
+	        User user = em.createQuery("select u from User u where u.email=:email", User.class).setParameter("email", email).getSingleResult();
 	        msg.setFrom(new InternetAddress("mohamedwejih.sbai@esprit.tn"));
 	        msg.setRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
 	        msg.setSubject("Forgetten password");
 	        msg.setSentDate(new Date());
-	        msg.setText("Change your password here: http://localhost:9080/TrueDelta-web/truedelta/authentication?token=xxxxxxxxxxxxxxxxxxxxx&email=imencherifw@gmail.com");
+	        msg.setText("Change your password here: http://localhost:9080/TrueDelta-web/truedelta/authentication?token="+user.getVerifToken()+"&email="+email);
 	        Transport.send(msg);
 	    } catch (MessagingException mex) {
 	        System.out.println("send failed, exception: " + mex);

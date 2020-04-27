@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -67,6 +68,13 @@ public class Company implements Serializable{
 		this.name = name;
 		this.sector = sector;
 	}
+	public Company(String symbol, String industry, String name, String sector) {
+		this.symbol = symbol;
+		this.industry = industry;
+		this.name = name;
+		this.sector = sector;
+	}
+	
 	public Company() {}
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="company")
 	private List<Bond> bonds ;
@@ -91,6 +99,17 @@ public class Company implements Serializable{
 	}
 	public void setOptions(List<Option> options) {
 		this.options = options;
+	}
+	
+	
+	//Méthodes
+	public void addStock(Stock stock) {
+		
+		stock.setCompany(this);
+		if(this.stocks == null) //Car la première fois, aucune liste n'est instanciée
+			this.stocks = new ArrayList<Stock>();
+		
+		this.stocks.add(stock);
 	}
 	
 	

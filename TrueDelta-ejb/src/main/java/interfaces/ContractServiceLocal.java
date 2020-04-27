@@ -26,5 +26,5 @@ public interface ContractServiceLocal {
 	int EstimatedScore(Contract contrat, int id);
 	List FindContractByEtat(String state);
 	List FindContractByDate();
-	List FindContractByType(String type);
+	List FindContractByType(String type); 
 }
