@@ -23,4 +23,7 @@ public interface ContractServiceRemote {
 	public int EstimatedScore(Contract contrat,int id);
 	double CalculGainClient(Contract con);
 	int ScoreFinalContratAL(Contract contrat, int id); 
+	List FindContractByEtat(String state);
+	List FindContractByDate();
+	List FindContractByType(String type); 
 } 
