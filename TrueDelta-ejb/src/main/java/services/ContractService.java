@@ -196,23 +196,8 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	       
 
-	/*
-	 * @Override(non-Javadoc)
-	 * @see interfaces.ContractServiceLocal#ScoreFinalContratAL(entities.Contract, int)
 	
-	public int ScoreFinalContratAL(Contract contrat,int id) {
-		int total = 0;
-		for (int note : scoreA) {
-		    total += note;
-		}
-		int moyenne = total / scoreA.size();
-		System.out.println(moyenne);
-		return moyenne;
-		
-		
-	}
-	
-	 */
+
 	
 	
 	
