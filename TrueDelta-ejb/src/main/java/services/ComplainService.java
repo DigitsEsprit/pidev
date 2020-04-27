@@ -2,8 +2,10 @@ package services;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
@@ -16,11 +18,12 @@ import entities.Complain;
 import entities.Role;
 import entities.State;
 import entities.User;
+import interfaces.IComplainServiceLocal;
 import interfaces.IComplainServiceRemote;
 
 @Stateful
 @LocalBean
-public class ComplainService implements IComplainServiceRemote {
+public class ComplainService implements IComplainServiceRemote,IComplainServiceLocal {
 	
 	@PersistenceContext(unitName="TrueDelta-ejb")
 	
@@ -30,11 +33,14 @@ public class ComplainService implements IComplainServiceRemote {
 	@Override
 	public int AddComplaint(Complain complaint , int id_investor) {	
 		 User investor = em.find(User.class, id_investor); 
+		 
 	        if(investor.getRole()==Role.investor)
           {
 			  complaint.setUser(investor);
+			  complaint.setState(State.Opened);
 
           em.persist(complaint);
+          MatchingReponse(complaint.getId_Reclamation());
           return 1;
           }
           else
@@ -116,17 +122,17 @@ public class ComplainService implements IComplainServiceRemote {
 
 	
 	@Override
-    public void TreatComplaint(int id_complain, String state,int id_investor) {
+    public void TreatComplaint(int id_complain, String state,int id_investor,String reponse) {
 
-        User investor = em.find(User.class, id_investor); 
+       /* User investor = em.find(User.class, id_investor); 
         if(investor.getRole()==Role.investor)
-         {
+         {*/
         Calendar currenttime = Calendar.getInstance();
         Date now = new Date((currenttime.getTime()).getTime());
         State st = State.valueOf(state);
         Complain complain = em.find(Complain.class, id_complain);
 
-        if (st == State.inprogress) {
+        if (st == State.inprogress) { 
             complain.setAssignmentDate(now);
             complain.setState(st);
             em.merge(complain);
@@ -145,6 +151,7 @@ public class ComplainService implements IComplainServiceRemote {
 
             complain.setClosingDate(now);
             complain.setState(st);
+            complain.setReponse(reponse);
             em.merge(complain);
 
             try {
@@ -158,7 +165,7 @@ public class ComplainService implements IComplainServiceRemote {
                 e.printStackTrace();
             }
         }
-    }
+    
     }
 	
 	 @Override
@@ -174,7 +181,7 @@ public class ComplainService implements IComplainServiceRemote {
 	if (( input1!=output1)||(input2!=output2))
 	    	       
 	{
-		//deleteComplain(idRec);
+		deleteComplain(idRec);
 		
 		try {
 
@@ -192,6 +199,53 @@ public class ComplainService implements IComplainServiceRemote {
 	    
 }
 	
+	 
+
+	 
+	 public  String MatchingReponse(int  idRec)  {
+
+         Complain complain = em.find(Complain.class, idRec);
+         String descIn = complain.getDescription();
+         String bestMatch = null;
+         TreeMap<Integer, String> myMorphoMatchMap = new TreeMap<Integer, String>();
+         List<Complain> myallList = GetAllComplaint();
+         List<String> maList = new ArrayList<String>();
+         for (int i = 0; i < myallList.size(); i++)
+         {
+             if ( myallList.get(i).getId_Reclamation()!=idRec)
+             {String descOut = myallList.get(i).getDescription();
+             maList.add(descOut);}
+         }
+
+         for (int i = 0; i < maList.size(); i++) {
+             myMorphoMatchMap.putAll(EditDistance.calculate(maList.get(i), descIn));
+         }
+         if (myMorphoMatchMap.firstKey() < 50) {
+             bestMatch = myMorphoMatchMap.get(myMorphoMatchMap.firstKey());
+
+             TypedQuery<Complain> q = em.createQuery("SELECT R FROM Complain R WHERE R.description =:match",
+            		 Complain.class);
+             q.setParameter("match", bestMatch);
+             List<Complain> recMatch =q.getResultList();
+             System.out.println(recMatch.size());
+             complain.setReponse(recMatch.get(0).getReponse()+"   "+" ( Cette Reponse est envoyé automatique par notre system )  ");
+             complain.setState(State.inprogress);
+
+
+         }
+         else {
+             bestMatch = "";
+         }
+
+         return bestMatch;
+
+     }
+	 
+	 
+	 
+	
+	 
+	 
 	@Override
 	public Complain AffectComplaintsToAdmin(int id) {
 		
@@ -213,6 +267,8 @@ public class ComplainService implements IComplainServiceRemote {
 		return c;
 	}
 
+	
+		
 	
 	
 

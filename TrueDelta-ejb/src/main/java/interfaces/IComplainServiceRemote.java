@@ -19,7 +19,7 @@ public interface IComplainServiceRemote {
 	public List<Complain> GetComplaintsOrderByDateDESC();
 	public List<Complain> SearchComplain(String motclé);
 	public Complain AffectComplaintsToAdmin(int id);
-    public void TreatComplaint(int id_complain, String state,int id_admin);
+    public void TreatComplaint(int id_complain, String state,int id_investor,String reponse);
     public String verifBadWord(int idRec ) throws InterruptedException;
 
 	}

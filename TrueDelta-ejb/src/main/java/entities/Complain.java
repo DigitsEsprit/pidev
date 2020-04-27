@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="COMPLAINS")
+
 public class Complain implements Serializable {
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -33,6 +34,9 @@ public class Complain implements Serializable {
 	private Date assignmentDate;
 	@Column(name = "closingDate")
 	private Date closingDate;
+	@Column(name="REPONSE")
+	private String reponse;
+	
 	
 	private static final long serialVersionUID = -558553967080513790L;
 
@@ -108,6 +112,22 @@ public class Complain implements Serializable {
 
 	}
 	
+	
+	public Complain(int id_Reclamation, String description, Date date, String subject, State state, Date assignmentDate,
+			Date closingDate, String reponse, User user, User admin, User investor) {
+		super();
+		this.id_Reclamation = id_Reclamation;
+		this.description = description;
+		this.date = date;
+		this.subject = subject;
+		this.state = state;
+		this.assignmentDate = assignmentDate;
+		this.closingDate = closingDate;
+		this.reponse = reponse;
+		this.user = user;
+		this.admin = admin;
+		this.investor = investor;
+	}
 	public Complain() {}
 	@ManyToOne	
 	private User user;
@@ -131,6 +151,14 @@ public class Complain implements Serializable {
 	public void setInvestor(User investor) {
 		this.investor = investor;
 	}
+	public String getReponse() {
+		return reponse;
+	}
+	public void setReponse(String reponse) {
+		this.reponse = reponse;
+	}
+	
+	
 	
 	
 	
