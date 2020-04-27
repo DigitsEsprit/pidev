@@ -19,8 +19,12 @@ public interface ContractServiceLocal {
 	//public int addContract(Contract contrat);
 	public double CalculGainAsset(Contract con);
 	 public double CalculGainCourtier(Contract con);
-	int EstimatedScore(Contract contrat,int id);
+	//int EstimatedScore(Contract contrat,int id);
 	double CalculGainClient(Contract con);
 
 	int ScoreFinalContratAL(Contract contrat, int id);
+	int EstimatedScore(Contract contrat, int id);
+	List FindContractByEtat(String state);
+	List FindContractByDate();
+	List FindContractByType(String type);
 }

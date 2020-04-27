@@ -25,6 +25,15 @@ public class Contract implements Serializable {
 	private String description;
 	@Column(name="START_DATE")
 	private Date start_date;
+	@Column(nullable=true)
+	private Date  processing_date;
+	public Date getProcessing_date() {
+		return processing_date;
+	}
+	public void setProcessing_date(Date processing_date) {
+		this.processing_date = processing_date;
+	}
+
 	@Column(name="END_DATE")
 	private Date end_date;
 	@Column(name="CONTRACT_TYPE")
@@ -44,8 +53,13 @@ public class Contract implements Serializable {
 	private double percentage_AM;
 	@Column(name="CAPITAL")
 	private double capital;
+	@Column(nullable=true)
+	private String State;
+	
 	@Column(name="SCORE")
 	private int score;
+	@Column(nullable=true)
+	private String NoticeContract;
 	public int getScore() {
 		return score;
 	}
@@ -189,6 +203,18 @@ public class Contract implements Serializable {
 		this.description = description;
 		this.contract_type = contract_type;
 		this.gain = gain;
+	}
+	public String getState() {
+		return State;
+	}
+	public void setState(String state) {
+		State = state;
+	}
+	public String getNoticeContract() {
+		return NoticeContract;
+	}
+	public void setNoticeContract(String noticeContract) {
+		NoticeContract = noticeContract;
 	}
 	
 		

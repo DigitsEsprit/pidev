@@ -8,9 +8,11 @@ import java.util.OptionalDouble;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import entities.Contract;
 import entities.ContractType;
+import entities.State;
 import entities.User;
 import interfaces.ContractServiceLocal;
 import interfaces.ContractServiceRemote;
@@ -31,21 +33,16 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
         {
 			  contract.setUser(user);
 
-        
-		em.persist(contract);
-		return contract.getId_Contract();
+			  contract.setNoticeContract(null);
+			  contract.setState("en cours");
+			  contract.setScore(0);
+			  contract.setGain(0);
+		      em.persist(contract);
+		      return contract.getId_Contract();
         }
         else
             return 0;
 	}
-	
-	/*@Override
-	public int addContract(Contract contrat) {	
-		contrat.setScore(0);
-		em.persist(contrat);
-		return contrat.getId_Contract();
-	}
-	*/
 	
 
 	@Override
@@ -66,7 +63,32 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 		Contract contract=em.find(Contract.class, id);
 		return contract;
 	}
+	@Override
+	public List FindContractByEtat(String state) {
+		TypedQuery<Contract> contracts = em.createQuery("select c from Contracts c where c.State = :State",Contract.class);
+		contracts.setParameter("State", state);
+		return (List) contracts.getResultList();
+	}
 
+	@Override
+	public List FindContractByDate() {
+
+		TypedQuery<Contract> contracts = em.createQuery("select c from Contracts c order by c.START_DATE ASC",
+				Contract.class);
+
+		return (List) contracts.getResultList();
+	}
+	
+	
+	@Override
+	public List FindContractByType(String type) {
+		ContractType TypeC = ContractType.valueOf(type);
+		TypedQuery<Contract> contracts = em.createQuery("select c from Contracts c where c.CONTRACT_TYPE = :type",
+				Contract.class);
+		contracts.setParameter("CONTRACT_TYPE",TypeC);
+		return (List) contracts.getResultList();
+	}
+	
 	@Override
 	public List findAllContracts() {
 		
@@ -146,7 +168,7 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 		ContractType AL= ContractType.all_in;
     	ContractType SP= ContractType.specified;
-    	
+    
 	    if((contrat.getContract_type().equals(AL)) && (contrat.getGain()<CalculGainClient(contrat)))
 	    {
 	    	scoreAL+=30;
@@ -169,10 +191,14 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	       else { for (int i = 0; i<scoreA.size(); i++) 
 	           scoreA.add( scoreAL);}
 	       {       return scoreAL;
-	       }}
+}
 	
+	       
 
-	@Override
+	/*
+	 * @Override(non-Javadoc)
+	 * @see interfaces.ContractServiceLocal#ScoreFinalContratAL(entities.Contract, int)
+	
 	public int ScoreFinalContratAL(Contract contrat,int id) {
 		int total = 0;
 		for (int note : scoreA) {
@@ -185,8 +211,7 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 		
 	}
 	
-
-	
+	 */
 	
 	
 	

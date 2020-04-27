@@ -18,7 +18,7 @@ public interface ContractServiceRemote {
 	public Contract findContractById(int id);
 	public List findAllContracts();
 	 public double CalculGainCourtier(Contract con);
-	//public int addContract(Contract contrat);
+	
 	public double CalculGainAsset(Contract con);
 	public int EstimatedScore(Contract contrat,int id);
 	double CalculGainClient(Contract con);
