@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,6 +25,7 @@ import interfaces.IUserServiceLocal;
 
 
 @Stateless
+@LocalBean
 public class UserService implements IUserServiceLocal {
 	@PersistenceContext(unitName="TrueDelta-ejb")
 	EntityManager em;
