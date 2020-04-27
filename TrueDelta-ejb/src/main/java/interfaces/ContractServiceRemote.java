@@ -13,7 +13,7 @@ import entities.ContractType;
 public interface ContractServiceRemote {
 	
 	public int addContract(Contract contract, int id_user);
-	public int addContract(Contract contract, int id_user);
+
 	public void deleteContract(int id);
 	public void updateContract(Contract contract);
 	public Contract findContractById(int id);
