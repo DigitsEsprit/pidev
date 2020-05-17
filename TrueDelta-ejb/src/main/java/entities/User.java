@@ -160,8 +160,10 @@ public User(int id_user, String first_name, String last_name, String email, int 
 	this.classification = classification;
 	this.bourse = bourse;
 }
-@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
-private List<Contract> Contracts;
+@OneToMany(cascade = CascadeType.ALL, mappedBy="user1")
+private List<Contract> Contracts1;
+@OneToMany(cascade = CascadeType.ALL, mappedBy="user2")
+private List<Contract> Contracts2;
 @OneToOne(mappedBy="user")
 private Portfolio portfolio;
 @OneToMany(cascade = CascadeType.ALL, mappedBy="user")

@@ -160,12 +160,22 @@ public class Contract implements Serializable {
 	}
 	
 	@ManyToOne	
-	private User user;
-	public User getUser() {
-		return user;
+	private User user1;
+	
+	@ManyToOne	
+	private User user2;
+	
+	public User getUser1() {
+		return user1;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser1(User user1) {
+		this.user1 = user1;
+	}
+	public User getUser2() {
+		return user2;
+	}
+	public void setUser2(User user2) {
+		this.user2 = user2;
 	}
 	public Contract(String description) {
 		super();
@@ -198,10 +208,10 @@ public class Contract implements Serializable {
 		this.percentage_AM = percentage_AM;
 		this.capital = capital;
 	}
-	public Contract(String description, ContractType contract_type, double gain) {
+	public Contract(String description, double gain) {
 		super();
 		this.description = description;
-		this.contract_type = contract_type;
+	
 		this.gain = gain;
 	}
 	public String getState() {
