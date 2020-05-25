@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+     
+    <ui:define name="title">
+       Résultat du questionnaire
+    </ui:define>
+    
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Messages"/>
+       
+          <p:panel styleClass="card box-info" header="">
+         
+    
+    
+            <h:form > 
+            <p style="border-radius: 10px;">
+              <font size="+2"> <center>VOTRE PROJET</center>  </font>
+            <br></br><center>
+        Objectif :    <font size="+0"> <h:outputText value="#{contractBean.objectif}" /></font> 
+            <br></br>
+            Horizon de placement: <font size="+0"><h:outputText value="#{contractBean.horizonPlacement}" /></font> 
+           </center>    <br></br>
+            
+          
+        
+           <font size="+2"> <center>   VOTRE PROFIL INVESTISSEUR  </center>  </font> 
+     
+           <font color="#FA8072" size="+1">  <center>  <h:outputText value="#{contractBean.PROFIL}" /></center></font> 
+   <br></br>  <font size="+0">       <center><h:outputText value="#{contractBean.DESCRIPTION}" /></center> </font>
+           </p> </h:form>
+             
+                    
+      </p:panel>
+       <p:panel styleClass="card box-info" header="">
+          <h:form >
+      
+            <p:panel header="Votre mode de gestion " styleClass="card no-border" style="width:100%" >
+             <CENTER> <p:dataTable var="car" value="" reflow="true" style="width:80%">
+                            <p:column headerText=" Gestion Sous Mondat
+             
+                          (accessible dés que 1000 €)">
+                                <h:outputText value=" Vous déléguez totalement le choix des supports d'investissement de votre
+                          contrat à votre assureur qui prend conseil auprès des sociétés de gestion expertes.
+                          
+                          
+                          Les supports en unités de compte présents dans les mandats ne garantissent pas le
+                          capital versé et sont soumis aux fluctuations des marchés financiers  à la 
+                          hausse comme à la baisse"/>
+                          <br> </br><br> </br>
+               
+<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="radio" name="rep" class="minimal" value="None" /> non
+       </p:panelGrid>
+                            </p:column>
+
+                          
+                            <p:column headerText=" Gestion Libre
+                        
+                          (accessible dés que 100 €)">
+                                <h:outputText value=" Vous sélectionnez vous-meme vos supports d'investissement 
+                                et gérez votre contract en toute autonomie"/>
+                                <br> </br><br> </br><br> </br><br> </br>
+                                
+                                
+                          <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="radio" name="rep" class="minimal" value="None" /> Oui
+       </p:panelGrid>
+        
+ 
+                            </p:column>
+                            
+                       
+                                  
+                        </p:dataTable>
+             </CENTER>          
+                    </p:panel>
+                    
+               
+                    
+          </h:form>
+    
+         <br> </br>
+                    
+      </p:panel>
+      
+    </ui:define>
+    
+    
+   
+    
+    
+
+</ui:composition>
+

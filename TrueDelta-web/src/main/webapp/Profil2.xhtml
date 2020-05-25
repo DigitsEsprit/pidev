@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+     
+    <ui:define name="title">
+        Profil Investisseur
+    </ui:define>
+    
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Messages"/>
+       
+          <p:panel styleClass="card box-info" header=" Connaissance et expérience des produits financiers">
+            <p:tooltip/>
+    
+    
+            <h:form>
+             Parmi les instruments financiers et les marchés suivants, cochez ceux dont vous connaissez le fonctionnement et comprenez les risques puis répondez aux questions associées :
+            </h:form>
+             <p:separator/>
+
+            <h:form style="margin-left:250px">
+                <div class="ui-g ui-fluid">
+            <div style="font-size: 12pt; color:#FA8072">Quel est le niveau de risque de perte en capital que vous êtes prêt à accepter ?</div>    
+                         <BR></BR><BR></BR>
+                    
+                  <table style="width:70%; border-spacing: 5px 1rem;">
+                            
+  <tr>
+  <TD style="width:60%;">Certificats ou Turbos</TD>
+    <td>   
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="checkbox" name="rep" class="minimal" value="None" /> Oui
+       </p:panelGrid>
+    </td>
+               
+    <td>
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+           <input type="checkbox" name="rep" class="minimal" value="None" /> NON
+       </p:panelGrid></td>
+  
+  </tr>
+ 
+
+</table>
+<table style="width:70%; border-spacing: 5px 1rem;">
+                            
+  <tr>
+  <TD style="width:60%;">Produits monétaires</TD>
+    <td>   
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="checkbox" name="rep" class="minimal" value="None" /> Oui
+       </p:panelGrid>
+    </td>
+               
+    <td>
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+           <input type="checkbox" name="rep" class="minimal" value="None" /> NON
+       </p:panelGrid></td>
+  
+  </tr>
+ 
+
+</table>
+<table style="width:70%; border-spacing: 5px 1rem;">
+                            
+  <tr>
+  <TD style="width:60%;">Produits immobiliers en assurance-vie (SCI, SCPI)</TD>
+    <td>   
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="checkbox" name="rep" class="minimal" value="None" /> Oui
+       </p:panelGrid>
+    </td>
+               
+    <td>
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+           <input type="checkbox" name="rep" class="minimal" value="None" /> NON
+       </p:panelGrid></td>
+  
+  </tr>
+ 
+
+</table>
+<table style="width:70%; border-spacing: 5px 1rem;">
+                            
+  <tr>
+  <TD style="width:60%;">Produits obligataires(obligations et FCP obligataires)</TD>
+    <td>   
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="checkbox" name="rep" class="minimal" value="None" /> Oui
+       </p:panelGrid>
+    </td>
+               
+    <td>
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+           <input type="checkbox" name="rep" class="minimal" value="None" /> NON
+       </p:panelGrid></td>
+  
+  </tr>
+ 
+
+</table>
+<br></br><br></br>
+
+<table style="width:70%; border-spacing: 5px 1rem;">
+                            
+  <tr>
+   <TD style="width:60%;">Produits actions(actions, SICAV et 
+  FCP actions)</TD>
+    <td>   
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="checkbox" name="rep" class="minimal" value="None" /> Oui
+       </p:panelGrid>
+    </td>
+               
+    <td>
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+           <input type="checkbox" name="rep" class="minimal" value="None" /> NON
+       </p:panelGrid></td>
+  
+  </tr>
+ 
+
+</table>
+<table style="width:70%; border-spacing: 5px 1rem;">
+                            
+  <tr>
+  <TD style="width:60%;">Trackers                       </TD>
+    <td>   
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="checkbox" name="rep" class="minimal" value="None" /> Oui
+       </p:panelGrid>
+    </td>
+               
+    <td>
+       <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+           <input type="checkbox" name="rep" class="minimal" value="None" /> NON
+       </p:panelGrid></td>
+  
+  </tr>
+ 
+
+</table>
+<BR></BR><BR></BR>
+
+</div>
+<BR></BR><BR></BR>
+<h:commandButton id="RETOUR" value="PRECEDANT" action="#{contractBean.goToProfil1()}" class="btn btn-primary" style="width:100px;height:40px"/>
+<h:commandButton id="VALIDER" value="VALIDER" action="#{contractBean.ProfilInvestisseur}" class="btn btn-primary" style=" margin-left: 330px;width:90px;height:40px"/>
+</h:form>
+                    
+      </p:panel>
+    
+    </ui:define>
+    
+    
+   
+    
+    
+
+</ui:composition>
+

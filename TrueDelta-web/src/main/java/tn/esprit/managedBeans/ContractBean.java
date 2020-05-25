@@ -1,0 +1,360 @@
+package tn.esprit.managedBeans;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.model.SelectItem;
+
+import entities.Contract;
+import entities.ContractType;
+import entities.User;
+import interfaces.ContractServiceRemote;
+import services.ContractService;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+@ManagedBean
+@SessionScoped
+public class ContractBean implements Serializable  {
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String description;
+
+	private Date  start_date ;
+	private Date  end_date ;
+	private ContractType  contract_type ;
+
+	private double capital; 
+	private double risk; 
+	private String contracttypeenum;
+	double percentage_client;
+	double percentage_AM;
+
+private String signature;  
+ 
+private String NIVEAU;
+private String typePortefeuille;
+private String Reaction;
+private String objectif;
+private String partEpargne;
+private String HorizonPlacement;
+ 
+private String PROFIL; 
+private String DESCRIPTION;
+ 
+ 
+public String getDESCRIPTION() {
+	return DESCRIPTION;
+}
+
+
+
+
+public void setDESCRIPTION(String dESCRIPTION) {
+	DESCRIPTION = dESCRIPTION;
+}
+
+
+
+
+public String getPROFIL() {
+	return PROFIL;
+}
+
+
+
+
+public void setPROFIL(String pROFIL) {
+	PROFIL = pROFIL;
+}
+
+private ExternalContext externalContext;
+
+public String getNIVEAU() {
+	return NIVEAU;
+}
+
+
+
+
+public void setNIVEAU(String nIVEAU) {
+	NIVEAU = nIVEAU;
+}
+
+
+
+
+public String getTypePortefeuille() {
+	return typePortefeuille;
+}
+
+
+
+
+public void setTypePortefeuille(String typePortefeuille) {
+	this.typePortefeuille = typePortefeuille;
+}
+
+
+
+
+public String getReaction() {
+	return Reaction;
+}
+
+
+
+
+public void setReaction(String reaction) {
+	Reaction = reaction;
+}
+
+
+
+
+public String getObjectif() {
+	return objectif;
+}
+
+
+
+
+public void setObjectif(String objectif) {
+	this.objectif = objectif;
+}
+
+
+
+
+public String getPartEpargne() {
+	return partEpargne;
+}
+
+
+
+
+public void setPartEpargne(String partEpargne) {
+	this.partEpargne = partEpargne;
+}
+
+
+
+
+public String getHorizonPlacement() {
+	return HorizonPlacement;
+}
+
+
+
+
+public void setHorizonPlacement(String horizonPlacement) {
+	HorizonPlacement = horizonPlacement;
+}
+
+@EJB 
+ContractService CSR;
+private Contract C;
+
+/*
+public void addContract() {
+Contract Vh = new Contract();
+
+Vh.setGain(this.getGain());
+Vh.setPercentage_AM(this.getPercentage_AM());
+Vh.setCapital(this.getCapital());
+CSR.addContract(Vh);
+
+}
+  */ 
+
+public void ProfilInvestisseur() throws IOException {  
+	
+	 if ((NIVEAU.equals("PasdeRisque") ) && (typePortefeuille.equals("PortfolioA"))) {
+			System.out.println("Investisseur Sécuritaire  ");
+			PROFIL="Investisseur Sécuritaire" ;
+			DESCRIPTION="Vous êtes donc prêt à valoriser un capital à moyen terme, tout en bénéficiant d’un risque modéré ";
+		}
+ 
+	   else 
+		   if ((NIVEAU.equals("RisqueLimite"))&& (typePortefeuille.equals("PortfolioB"))) {
+			System.out.println("Investisseur Prudent  ");
+			PROFIL="Investisseur Prudent" ;
+			DESCRIPTION="Vous êtes prêt à accepter un rendement modéré de votre investissement en contrepartie d'un faible risque de perte en capital. ";
+			
+		}
+		else 
+			if ((NIVEAU.equals("RisqueMoyen"))&& (typePortefeuille.equals("PortfolioC"))) {
+				System.out.println("Équilibré  ");
+				PROFIL="Investisseur Équilibré" ;
+				DESCRIPTION="Vous êtes donc prêt à valoriser un capital à moyen terme, grâce à une diversification par classe d’actifs, tout en bénéficiant d’un risque équilibré.";
+			}
+		else 
+		    if ((NIVEAU.equals("RisqueEleve")) && (typePortefeuille.equals("PortfolioD"))){
+					System.out.println("Dynamique ");
+					PROFIL="Dynamique" ;
+					DESCRIPTION="Vous êtes donc prêt à accepter un risque de perte en capital. Vous maîtrisez les produits et instruments financiers,vous permettant d'investir essentiellement sur des supports en unités de comptes.";
+				}
+	 
+	 
+	 externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	
+	externalContext.redirect("ResultatProfil.xhtml");
+}
+
+public void addContract() {
+	Contract c = new  Contract(start_date,end_date,capital,risk,signature,percentage_client,percentage_AM);
+	 
+	
+	
+	
+	if(contracttypeenum.equals("Specific"))
+	{
+		c.setContract_type(ContractType.specified);
+	} 
+	else {c.setContract_type(ContractType.all_in);}
+	CSR.addContract(c); }
+
+
+
+
+public void setStart_date(Date start_date) {
+	this.start_date = start_date;
+}
+
+
+public Date getStart_date() {
+	return start_date;
+}
+
+public Date getEnd_date() {
+	return end_date;
+}
+
+
+public String getContracttypeenum() {
+	return contracttypeenum;
+}
+
+public void setContracttypeenum(String contracttypeenum) {
+	this.contracttypeenum = contracttypeenum;
+}
+
+public void setEnd_date(Date end_date) {
+	this.end_date = end_date;
+}
+
+
+public ContractType getContract_type() {
+	System.out.println("ddddddddd"+ contract_type);
+	return contract_type;
+}
+
+
+public void setContract_type(ContractType contract_type) {
+	this.contract_type = contract_type;
+}
+
+public SelectItem[] getMyContractTypeValues() {
+    SelectItem[] items = new SelectItem[ContractType.values().length];
+    int i = 0;
+    for(ContractType g: ContractType.values()) {
+      items[i++] = new SelectItem(g);
+    }
+    return items;
+  }
+//public ContractType[] getMyContractTypeValues() 
+//{ return ContractType.values(); }
+
+
+public String getDescription() {
+	return description;
+}
+
+
+public void setDescription(String description) {
+	this.description = description;
+}
+
+
+public void setCSR(ContractService cSR) {
+	this.CSR = cSR;
+}
+
+
+public double getCapital() {
+	return capital;
+}
+public void setCapital(double capital) {
+	this.capital = capital;
+}
+
+
+
+
+
+public double getPercentage_client() {
+	return percentage_client;
+}
+
+public void setPercentage_client(double percentage_client) {
+	this.percentage_client = percentage_client;
+}
+
+public double getPercentage_AM() {
+	return percentage_AM;
+}
+
+public void setPercentage_AM(double percentage_AM) {
+	this.percentage_AM = percentage_AM;
+}
+
+public double getRisk() {
+	return risk;
+}
+
+public void setRisk(double risk) {
+	this.risk = risk;
+}
+
+public String getSignature() {  
+return signature;  
+}  
+public void setSignature(String signature) {  
+this.signature = signature;  
+}  
+
+public void goToProfil2() throws IOException {
+    // ...
+	 
+	 externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	
+	externalContext.redirect("Profil2.xhtml");
+
+}
+
+public void goToProfil1() throws IOException {
+    // ...
+	 
+	 externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	
+	externalContext.redirect("Profil.xhtml");
+
+}
+
+
+
+
+
+
+
+
+
+
+}
+
+

@@ -4,14 +4,16 @@ package interfaces;
 import java.awt.List;
 
 import javax.ejb.Local;
+import javax.mail.MessagingException;
 
 import entities.Contract;
 import entities.ContractType;
+import entities.User;
 @Local
 
 public interface ContractServiceLocal {
 	
-	public int addContract(Contract contract, int id_user);
+	public int addContract(Contract contract);
 	public void deleteContract(int id);
 	public void updateContract(Contract contract);
 	public Contract findContractById(int id);
@@ -26,5 +28,13 @@ public interface ContractServiceLocal {
 	int EstimatedScore(Contract contrat, int id);
 	List FindContractByEtat(String state);
 	List FindContractByDate();
-	List FindContractByType(String type); 
+	List FindContractByType(String type);
+	int addBond(Contract contract);
+	Boolean ifExists(Contract C);
+	void send_Email(String msg, String adress, String subject) throws MessagingException;
+	
+	int scoreClient(User pk);
+	User affecterAssetManagerClient(Contract c);
+
+
 }

@@ -226,4 +226,35 @@ public class Contract implements Serializable {
 	public void setNoticeContract(String noticeContract) {
 		NoticeContract = noticeContract;
 	}
+	public Contract(Date start_date, Date end_date, ContractType contract_type, double capital,double gain,String Signature) {
+		super();
+	
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.contract_type = contract_type;
+		this.capital = capital;
+		this.gain = gain;
+		this.signature = signature;
+		
+	}
+	public Contract(Date start_date, Date end_date, double capital,double risk,String Signature, double percentage_client, double percentage_AM) {
+		super();
+	
+		this.start_date = start_date;
+		this.end_date = end_date;
+
+		this.capital = capital;
+		this.risk = risk;
+		this.signature = signature;
+		this.percentage_client = percentage_client;
+		this.percentage_AM = percentage_AM;
+		
+	}
+	public Contract(double capital, int score) {
+		super();
+		this.capital = capital;
+		this.score = score;
+	}
+	
+	
 }

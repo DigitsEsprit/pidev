@@ -4,13 +4,25 @@ package services;
 import java.awt.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.OptionalDouble;
+import java.util.Properties;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import entities.Bond;
+import entities.Complain;
 import entities.Contract;
 import entities.ContractType;
 import entities.State;
@@ -19,6 +31,8 @@ import interfaces.ContractServiceLocal;
 import interfaces.ContractServiceRemote;
 
 @Stateful
+@LocalBean 
+
 
 public class ContractService implements ContractServiceLocal, ContractServiceRemote {
 	
@@ -28,21 +42,15 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	EntityManager em;
 	
 	@Override
-	public int addContract(Contract contract, int id_user) {
-		User user = em.find(User.class, id_user); 
-		if(user!=null)
-        {
-			  contract.setUser(user);
+	public int addContract(Contract contract) {
 
-			  contract.setNoticeContract(null);
-			  contract.setState("en cours");
-			  contract.setScore(0);
-			  contract.setGain(0);
-		      em.persist(contract);
-		      return contract.getId_Contract();
-        }
-        else
-            return 0;
+		  contract.setNoticeContract(null);
+		  contract.setState("en cours");
+	//	  contract.setScore(30);
+		
+		//  contract.setGain();
+	      em.persist(contract);
+	      return contract.getId_Contract();
 	}
 	
 
@@ -214,8 +222,143 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	
 	}
-}
+
+	@Override
+	public Boolean ifExists(Contract C) {
+		if (em.find(Contract.class, C.getId_Contract()) == null)
+			return false;
+		else
+			return true;
+	}
 	
+	@Override
+	public int addBond(Contract C) {		 
+		if (ifExists(C) == false) {
+			em.persist(C);
+			System.out.println("Contract:" + C.getId_Contract());
+			return C.getId_Contract();
+		} else
+			return (Integer) null; 
+		}
+
+
+	@Override
+	public void send_Email(String msg, String adress,String subject)throws MessagingException {
+
+		final String username = "sarra.youssef@gmail.com";
+	    final String password = "183JFT0494";
+	    String host="smtp.gmail.com"; 
+	    
+	    
+	    Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.from",username);
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+        props.setProperty("mail.debug", "true");
+
+        
+	    Session session = Session.getInstance(props,null);                            
+	 
+		MimeMessage message = new MimeMessage(session);
+		message.setRecipients(Message.RecipientType.TO, adress);
+		message.setSubject(subject);
+		message.setSentDate(new Date());
+		message.setText(msg);
+        
+		Transport transport = session.getTransport("smtp");
+
+        transport.connect(username, password);
+        transport.sendMessage(message, message.getAllRecipients());
+        transport.close();
+	}
+
+	@Override
+	public int scoreClient(User pk) {
+	
+		int score=0;
+		
+		int idClient1;
+		idClient1=pk.getId_user();
+		User client = em.find(User.class, idClient1);
+		if (client.getSalaire()<1000) 
+		{     
+			score += 10;
+		}
+		else if (client.getSalaire()>=1000 && client.getSalaire()<=3000)
+		{
+			score += 30;
+		}
+		else if (client.getSalaire()>3000 && client.getSalaire()<10000)
+		{
+			score += 50;
+		}
+		else
+		{
+			score +=100;
+		}
+		
+		if (client.getAge()<=30)
+		{
+			score +=10;
+		}
+		else if (client.getAge()>30 && client.getAge()<55)
+		{
+			score +=30;
+		}
+		else
+		{
+			score +=50;
+		}
+		
+		if (client.getEtatCivil().equals("marie"))
+		{
+			score +=10;
+		}
+		else if (client.getEtatCivil().equals("celibataire") || client.getEtatCivil().equals("divorce"))
+		{
+			score +=20;
+		}
+		else 
+		{
+			score +=0;
+		}
+		
+		if (client.getMetier().equals("financier") || client.getMetier().equals("homme d'affaires"))
+		{
+			score +=100;
+		}
+		else 
+		{
+			score += 30;
+		}
+		
+		return score;
+	
+	}	
+	
+	@Override
+	public User affecterAssetManagerClient (Contract c) {
+		TypedQuery <User> query=em.createQuery("SELECT * from User u where u.role=asset_manager AND u.score>=? ",User.class)
+				              .setParameter(1,c.getScore())
+				              .setParameter (2,true);
+		
+		User u= query.getSingleResult();
+		c.setUser2(u);
+		return c.getUser2();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+}
+
 	
 	
 	
