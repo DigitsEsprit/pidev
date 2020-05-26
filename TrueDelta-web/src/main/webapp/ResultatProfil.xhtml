@@ -39,9 +39,11 @@
       </p:panel>
        <p:panel styleClass="card box-info" header="">
           <h:form >
-      
+         
             <p:panel header="Votre mode de gestion " styleClass="card no-border" style="width:100%" >
-             <CENTER> <p:dataTable var="car" value="" reflow="true" style="width:80%">
+              <font color="#FA8072" size="+0">       <center><h:outputText value="#{contractBean.contrat}" /></center> </font>
+              <br></br>
+             <CENTER> <p:dataTable var="car" value="" reflow="true" style="width:100%">
                             <p:column headerText=" Gestion Sous Mondat
              
                           (accessible dés que 1000 €)">
@@ -55,21 +57,21 @@
                           <br> </br><br> </br>
                
 <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
-          <input type="radio" name="rep" class="minimal" value="None" /> non
+          <input type="radio" name="rep" class="minimal" value="All_in" /><center>CHOISIR</center> 
        </p:panelGrid>
                             </p:column>
 
-                          
+                           
                             <p:column headerText=" Gestion Libre
                         
-                          (accessible dés que 100 €)">
+                          (accessible dés que 100 €)">  
                                 <h:outputText value=" Vous sélectionnez vous-meme vos supports d'investissement 
                                 et gérez votre contract en toute autonomie"/>
                                 <br> </br><br> </br><br> </br><br> </br>
                                 
                                 
                           <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
-          <input type="radio" name="rep" class="minimal" value="None" /> Oui
+          <input type="radio" name="rep" class="minimal" value="Specific" /><center>CHOISIR</center> 
        </p:panelGrid>
         
  
@@ -80,8 +82,10 @@
                         </p:dataTable>
              </CENTER>          
                     </p:panel>
-                    
-               
+            <BR></BR><BR></BR>
+<h:commandButton id="RETOUR" value="PRECEDANT" action="#{contractBean.goToProfil2()}" class="btn btn-primary" style="width:100px;height:40px"/>
+<h:commandButton id="VALIDER" value="VALIDER" action="#{contractBean.goToMandat()}" class="btn btn-primary" style=" margin-left: 780px;width:90px;height:40px"/>
+            
                     
           </h:form>
     

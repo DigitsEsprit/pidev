@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+     
+    <ui:define name="title">
+      Mandat( Profil de gestion )
+    </ui:define>
+    
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Messages"/>
+       <p:panel styleClass="card box-info" header="">
+       <h:form>
+          <CENTER>     <p:dataTable var="car" value="" reflow="true" style="width:70%">
+                            <p:column headerText=" Mandat Modéré">
+                                <h:outputText value=" Le mandat modéré vise une répartition à hauteur de 60% sur le
+                                fonds en euros à capital garanti Suravenir Rendement et 40% sur les unités de Compte.
+                                Nous vous rappelons que les supports en unités de compte ne garantissent pas le capital versé 
+                                et sont soumis aux fluctuations des marchés financiers à la hausse comme à la baisse. "/>
+                          <br> </br><br> </br>
+               
+<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="radio" name="rep" class="minimal" value="All_in" /><center>CHOISIR</center> 
+       </p:panelGrid>
+                            </p:column>
+<p:column headerText=" Mandat Equilibré">
+                                <h:outputText value=" Le mandat équilibré vise une répartition à hauteur de 40% sur le
+                                fonds en euros à capital garanti Suravenir Rendement et 60% sur les unités de Compte.
+                                Nous vous rappelons que les supports en unités de compte ne garantissent pas le capital versé 
+                                et sont soumis aux fluctuations des marchés financiers à la hausse comme à la baisse. "/>
+                          <br> </br><br> </br>
+               
+<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="radio" name="rep" class="minimal" value="All_in" /><center>CHOISIR</center> 
+       </p:panelGrid>
+                            </p:column>
+
+                                
+                         <p:column headerText=" Mandat Dynamique">
+                                <h:outputText value=" Vous privilégiez la recherche de la performance en contrepartie d'une prise de risque élevé.
+                                Le mandat dynamique vise une répartition à hauteur de 10% sur le
+                                fonds en euros à capital garanti Suravenir Rendement et 90% sur les unités de Compte.
+                                Nous vous rappelons que les supports en unités de compte ne garantissent pas le capital versé 
+                                et sont soumis aux fluctuations des marchés financiers à la hausse comme à la baisse. "/>
+                          <br> </br><br> </br>
+               
+<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
+          <input type="radio" name="rep" class="minimal" value="All_in" /><center>CHOISIR</center> 
+       </p:panelGrid>
+                            </p:column>
+                                  
+                        </p:dataTable></CENTER>
+    
+    
+             
+              <h:commandButton id="RETOUR" value="PRECEDANT" action="#{contractBean.GoResultatProfil()}" class="btn btn-primary" style="width:100px;height:40px"/>
+<h:commandButton id="VALIDER" value="VALIDER" action="#{contractBean.GoVersement()}" class="btn btn-primary" style=" margin-left: 780px;width:90px;height:40px"/>
+           
+</h:form>     
+      </p:panel>
+     
+ 
+    </ui:define>
+    
+    
+   
+    
+    
+
+</ui:composition>
+
