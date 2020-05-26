@@ -46,8 +46,23 @@ private String HorizonPlacement;
  
 private String PROFIL; 
 private String DESCRIPTION;
+private String contrat;
+
  
- 
+public String getContrat() {
+	return contrat;
+}
+
+
+
+
+public void setContrat(String contrat) {
+	this.contrat = contrat;
+}
+
+
+
+
 public String getDESCRIPTION() {
 	return DESCRIPTION;
 }
@@ -178,33 +193,34 @@ public void ProfilInvestisseur() throws IOException {
 			System.out.println("Investisseur Sécuritaire  ");
 			PROFIL="Investisseur Sécuritaire" ;
 			DESCRIPTION="Vous êtes donc prêt à valoriser un capital à moyen terme, tout en bénéficiant d’un risque modéré ";
-		}
+			contrat="Au regard de votre profil investisseur sécuritaire, nous vous conseillons la Gestion libre";	}
  
 	   else 
 		   if ((NIVEAU.equals("RisqueLimite"))&& (typePortefeuille.equals("PortfolioB"))) {
 			System.out.println("Investisseur Prudent  ");
 			PROFIL="Investisseur Prudent" ;
 			DESCRIPTION="Vous êtes prêt à accepter un rendement modéré de votre investissement en contrepartie d'un faible risque de perte en capital. ";
-			
+			contrat="Au regard de votre profil investisseur prudent, nous vous conseillons la Gestion sous Mandat";
 		}
 		else 
 			if ((NIVEAU.equals("RisqueMoyen"))&& (typePortefeuille.equals("PortfolioC"))) {
 				System.out.println("Équilibré  ");
 				PROFIL="Investisseur Équilibré" ;
 				DESCRIPTION="Vous êtes donc prêt à valoriser un capital à moyen terme, grâce à une diversification par classe d’actifs, tout en bénéficiant d’un risque équilibré.";
-			}
+				contrat="Au regard de votre profil investisseur équilibré, nous vous conseillons la Gestion libre";}
 		else 
 		    if ((NIVEAU.equals("RisqueEleve")) && (typePortefeuille.equals("PortfolioD"))){
 					System.out.println("Dynamique ");
-					PROFIL="Dynamique" ;
+					PROFIL="Investisseur Dynamique" ;
 					DESCRIPTION="Vous êtes donc prêt à accepter un risque de perte en capital. Vous maîtrisez les produits et instruments financiers,vous permettant d'investir essentiellement sur des supports en unités de comptes.";
-				}
+					contrat="Au regard de votre profil investisseur prudent, nous vous conseillons la Gestion sous Mandat";}
 	 
 	 
 	 externalContext = FacesContext.getCurrentInstance().getExternalContext();
 	
 	externalContext.redirect("ResultatProfil.xhtml");
 }
+
 
 public void addContract() {
 	Contract c = new  Contract(start_date,end_date,capital,risk,signature,percentage_client,percentage_AM);
@@ -345,8 +361,31 @@ public void goToProfil1() throws IOException {
 	externalContext.redirect("Profil.xhtml");
 
 }
+public void goToMandat() throws IOException {
+    // ...
+	 
+	 externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	
+	externalContext.redirect("Mandat.xhtml");
 
+}
+public void GoResultatProfil() throws IOException {
+    // ...
+	 
+	 externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	
+	externalContext.redirect("ResultatProfil.xhtml");
 
+}
+
+public void GoVersement() throws IOException {
+    // ...
+	 
+	 externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	
+	externalContext.redirect("Versement.xhtml");
+
+}
 
 
 
