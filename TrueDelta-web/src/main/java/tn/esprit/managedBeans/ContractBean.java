@@ -47,8 +47,23 @@ private String HorizonPlacement;
 private String PROFIL; 
 private String DESCRIPTION;
 private String contrat;
+private String Versement;
 
  
+public String getVersement() {
+	return Versement;
+}
+
+
+
+
+public void setVersement(String versement) {
+	Versement = versement;
+}
+
+
+
+
 public String getContrat() {
 	return contrat;
 }

@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+  
+    
+  <style type="text/css">
+        
+        
+              body div.ui-grid-row {
+                              background:transparent;
+            }
+        
+        
+        
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-g-12, .ui-sm-12 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .ui-datagrid-column .ui-panel.ui-widget-content {
+                border: none;
+            }
+   
+
+        </style>
+    <ui:define name="body">
+        <adm:breadcrumb title="Messages"/>
+       
+          <p:panel styleClass="card box-info" header=" Versement Initial">
+            <p:tooltip/>
+    <h:form style="margin: 0 auto; width:450px;">
+     <div class="ui-fluid #{layoutMB.flat ? 'ui-flat':''}">
+                <p:panelGrid  styleClass="ui-fluid card" >
+           
+    <p:outputLabel  value="Montant du versement" />  
+                
+    <p:inputText for="input" value="" required="true" placeholder="capital" min="1000" />
+<BR></BR><BR></BR>
+                   <p:outputLabel  value="Quelle est l'origine des fonds?" />  <br></br>
+      <p:selectOneMenu id="OrigineFonds" value="">
+                        <f:selectItem itemLabel="Héritage/Donation" itemValue="Héritage"/>
+                        <f:selectItem itemLabel="Vente d'actifs immobiliers" itemValue="ActifsImmobiliers"  />
+                        <f:selectItem itemLabel="Capitaux activités pro" itemValue="CapitauxActivités"  />
+                       
+                      <f:selectItem itemLabel="Cession de bien" itemValue="CessionBien"/>
+                        <f:selectItem itemLabel="Epargne déja constituéé" itemValue="Epargne"  />
+                        <f:selectItem itemLabel="Gains aux jeux" itemValue="Gains aux jeux"  />
+                       <f:selectItem itemLabel="Indemnisation/Dommages intérets" itemValue="Indemnisation"  />
+                       
+                      
+                </p:selectOneMenu> 
+                 <p:outputLabel for="oneBtn" value="Souhaitez-vous mettre en place un versement programmé?"/>
+                    <p:selectOneButton id="oneBtn">
+                        <f:selectItem itemLabel="Oui" itemValue="XB1"/>
+                        <f:selectItem itemLabel="Non" itemValue="PS4"/>
+                    </p:selectOneButton>
+                          <p:outputLabel  value="IBAN" />  
+                
+    <p:inputText for="input" value="" required="true" />
+               
+ <p:outputLabel  value="IBAN"  rendered="#{ContractBean.Versement=='XB1'}" />  
+                
+  
+     
+
+     
+</p:panelGrid>
+          
+            </div>
+         </h:form>
+      </p:panel>
+    
+    </ui:define>
+    
+    
+   
+    
+    
+
+</ui:composition>
+

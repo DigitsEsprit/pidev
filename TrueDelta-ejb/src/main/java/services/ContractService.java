@@ -341,7 +341,7 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	@Override
 	public User affecterAssetManagerClient (Contract c) {
-		TypedQuery <User> query=em.createQuery("SELECT * from User u where u.role=asset_manager AND u.score>=? ",User.class)
+		TypedQuery <User> query=em.createQuery("SELECT * from User u where u.role='asset_manager' AND u.score>=? ",User.class)
 				              .setParameter(1,c.getScore())
 				              .setParameter (2,true);
 		
