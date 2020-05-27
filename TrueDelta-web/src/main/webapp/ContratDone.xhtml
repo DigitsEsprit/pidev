@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+     
+    <ui:define name="title">
+   
+    </ui:define>
+   
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Messages"/>
+       <p:panel styleClass="card box-info" header="">
+       <font size="+2" color="#FA8072" > <center> 
+Congratulations</center>  </font>
+   <br></br><BR></BR>
+    <font size="+0"><center>  Your request has been taken into account.
+    <BR></BR>
+We will proceed to the study of your contract. As soon as you receive it, you will receive an email allowing you to follow the progress.
+     </center></font>
+<BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR>
+   <h:form>
+   <h:commandButton id="VALIDER" value="Back to the homepage" action="#{contractBean.GoIndex()}" class="btn btn-primary" style=" margin-left: 400px;width:190px;height:40px"/>
+   
+   
+   </h:form>
+   <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR> <BR></BR>
+      </p:panel>
+   
+ 
+    </ui:define>
+    
+    
+   
+    
+    
+
+</ui:composition>
+

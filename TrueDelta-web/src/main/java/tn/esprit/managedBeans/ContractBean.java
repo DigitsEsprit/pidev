@@ -11,6 +11,8 @@ import javax.faces.model.SelectItem;
 
 import entities.Contract;
 import entities.ContractType;
+import entities.PeriodiciteVersement;
+import entities.PortfolioType;
 import entities.User;
 import interfaces.ContractServiceRemote;
 import services.ContractService;
@@ -28,7 +30,7 @@ public class ContractBean implements Serializable  {
 	private Date  start_date ;
 	private Date  end_date ;
 	private ContractType  contract_type ;
-
+private PortfolioType portfolio_type;
 	private double capital; 
 	private double risk; 
 	private String contracttypeenum;
@@ -47,19 +49,140 @@ private String HorizonPlacement;
 private String PROFIL; 
 private String DESCRIPTION;
 private String contrat;
-private String Versement;
 
- 
-public String getVersement() {
-	return Versement;
+private String IBAN;
+private String fonds;
+private String period;
+private Date dateVersement;
+
+private String program;
+private double versement;
+private String portfoliotypeenum;
+
+private String periodenum;
+
+
+
+
+
+
+
+
+
+public PortfolioType getPortfolio_type() {
+	return portfolio_type;
 }
 
 
 
 
-public void setVersement(String versement) {
-	Versement = versement;
+public void setPortfolio_type(PortfolioType portfolio_type) {
+	this.portfolio_type = portfolio_type;
 }
+
+
+
+
+public String getPortfoliotypeenum() {
+	return portfoliotypeenum;
+}
+
+
+
+
+public void setPortfoliotypeenum(String portfoliotypeenum) {
+	this.portfoliotypeenum = portfoliotypeenum;
+}
+
+
+
+
+public double getVersement() {
+	return versement;
+}
+
+
+
+
+public void setVersement(double versement) {
+	this.versement = versement;
+}
+
+
+
+
+public String getProgram() {
+	return program;
+}
+
+
+
+
+public void setProgram(String program) {
+	this.program = program;
+}
+
+
+
+
+public String getFonds() {
+	return fonds;
+}
+
+
+
+
+public void setFonds(String fonds) {
+	this.fonds = fonds;
+}
+
+
+
+
+public String getPeriod() {
+	return period;
+}
+
+
+
+
+public void setPeriod(String period) {
+	this.period = period;
+}
+
+
+
+
+public Date getDateVersement() {
+	return dateVersement;
+}
+
+
+
+
+public void setDateVersement(Date dateVersement) {
+	this.dateVersement = dateVersement;
+}
+
+
+
+
+
+
+
+
+public String getIBAN() {
+	return IBAN;
+}
+
+
+
+
+public void setIBAN(String iBAN) {
+	IBAN = iBAN;
+}
+
+
 
 
 
@@ -237,10 +360,8 @@ public void ProfilInvestisseur() throws IOException {
 }
 
 
-public void addContract() {
-	Contract c = new  Contract(start_date,end_date,capital,risk,signature,percentage_client,percentage_AM);
-	 
-	
+public String addContract() {
+	Contract c = new  Contract(capital,IBAN,versement,dateVersement);
 	
 	
 	if(contracttypeenum.equals("Specific"))
@@ -248,7 +369,39 @@ public void addContract() {
 		c.setContract_type(ContractType.specified);
 	} 
 	else {c.setContract_type(ContractType.all_in);}
-	CSR.addContract(c); }
+	if(portfoliotypeenum.equals("Dynamique"))
+	{
+		c.setPortfolio_type(PortfolioType.Dynamique);
+	} 
+	if(portfoliotypeenum.equals("Equilibre"))
+	{
+		c.setPortfolio_type(PortfolioType.Equilibre);
+	} else {c.setPortfolio_type(PortfolioType.Modere);}
+	
+	
+	
+	
+	
+	
+	if(period.equals("mensuel"))
+	{
+		c.setPeriodicite(PeriodiciteVersement.Mensuel);
+	}
+
+	if(period.equals("semestriel"))
+	{
+		c.setPeriodicite(PeriodiciteVersement.Semestriel);
+	}
+	if(period.equals("trimestriel"))
+	{
+		c.setPeriodicite(PeriodiciteVersement.Trimestriel);
+	} else {	c.setPeriodicite(PeriodiciteVersement.Annuel);}
+	
+	
+	CSR.addContract(c);
+	
+	return "ContratDone?faces-redirect=true";
+	}
 
 
 
@@ -401,11 +554,19 @@ public void GoVersement() throws IOException {
 	externalContext.redirect("Versement.xhtml");
 
 }
+public String GoContrat() {
+    // ...
+	 
 
+return "Contrat?faces-redirect=true";
 
+}
 
+public String GoIndex() {
 
+return "index?faces-redirect=true";
 
+}
 
 
 

@@ -9,6 +9,16 @@
     <ui:define name="title">
        Résultat du questionnaire
     </ui:define>
+        <style type="text/css">
+        
+        
+            
+.iceSelOneRb table tr td {
+    padding:  50px;
+}
+   
+
+        </style>
     
 
     <ui:define name="body">
@@ -39,12 +49,12 @@
       </p:panel>
        <p:panel styleClass="card box-info" header="">
           <h:form >
-         
+     
             <p:panel header="Votre mode de gestion " styleClass="card no-border" style="width:100%" >
               <font color="#FA8072" size="+0">       <center><h:outputText value="#{contractBean.contrat}" /></center> </font>
               <br></br>
              <CENTER> <p:dataTable var="car" value="" reflow="true" style="width:100%">
-                            <p:column headerText=" Gestion Sous Mondat
+                   <p:column headerText=" Gestion Sous Mondat
              
                           (accessible dés que 1000 €)">
                                 <h:outputText value=" Vous déléguez totalement le choix des supports d'investissement de votre
@@ -55,11 +65,7 @@
                           capital versé et sont soumis aux fluctuations des marchés financiers  à la 
                           hausse comme à la baisse"/>
                           <br> </br><br> </br>
-               
-<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
-          <input type="radio" name="rep" class="minimal" value="All_in" /><center>CHOISIR</center> 
-       </p:panelGrid>
-                            </p:column>
+                       </p:column>
 
                            
                             <p:column headerText=" Gestion Libre
@@ -70,16 +76,20 @@
                                 <br> </br><br> </br><br> </br><br> </br>
                                 
                                 
-                          <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" style="widhth:150px;height:60px">
-          <input type="radio" name="rep" class="minimal" value="Specific" /><center>CHOISIR</center> 
-       </p:panelGrid>
-        
+                 
  
                             </p:column>
-                            
-                       
-                                  
-                        </p:dataTable>
+                          
+                          
+      
+        
+                   </p:dataTable>
+                   <h:selectOneRadio  value="#{contractBean.contracttypeenum}" styleClass=".iceSelOneRb table tr td" >
+   	                    <f:selectItem itemLabel="GESTION SOUS MANDAT" itemValue="All_in" />
+                       <BR></BR>
+   <f:selectItem itemLabel="GESTION LIBRE" itemValue="Specific"  />
+    
+</h:selectOneRadio>
              </CENTER>          
                     </p:panel>
             <BR></BR><BR></BR>
@@ -88,7 +98,11 @@
             
                     
           </h:form>
-    
+    <BR></BR>
+<BR></BR><BR></BR>
+<BR></BR><BR></BR>
+<BR></BR><BR></BR>
+<BR></BR>
          <br> </br>
                     
       </p:panel>

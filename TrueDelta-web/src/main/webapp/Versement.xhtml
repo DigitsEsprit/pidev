@@ -44,10 +44,13 @@
            
     <p:outputLabel  value="Montant du versement" />  
                 
-    <p:inputText for="input" value="" required="true" placeholder="capital" min="1000" />
-<BR></BR><BR></BR>
+    <p:inputText for="input" value="#{contractBean.capital}" required="true" placeholder="capital" min="1000" />
+    
+  
+<BR></BR>    <BR></BR>
+
                    <p:outputLabel  value="Quelle est l'origine des fonds?" />  <br></br>
-      <p:selectOneMenu id="OrigineFonds" value="">
+      <p:selectOneMenu id="OrigineFonds" value="#{contractBean.fonds}">
                         <f:selectItem itemLabel="Héritage/Donation" itemValue="Héritage"/>
                         <f:selectItem itemLabel="Vente d'actifs immobiliers" itemValue="ActifsImmobiliers"  />
                         <f:selectItem itemLabel="Capitaux activités pro" itemValue="CapitauxActivités"  />
@@ -59,25 +62,76 @@
                        
                       
                 </p:selectOneMenu> 
-                 <p:outputLabel for="oneBtn" value="Souhaitez-vous mettre en place un versement programmé?"/>
-                    <p:selectOneButton id="oneBtn">
-                        <f:selectItem itemLabel="Oui" itemValue="XB1"/>
-                        <f:selectItem itemLabel="Non" itemValue="PS4"/>
-                    </p:selectOneButton>
+                
+               <BR></BR>
+               
                           <p:outputLabel  value="IBAN" />  
                 
-    <p:inputText for="input" value="" required="true" />
-               
- <p:outputLabel  value="IBAN"  rendered="#{ContractBean.Versement=='XB1'}" />  
+                         <p:inputText for="input" value="#{contractBean.IBAN}" required="true" />
                 
+  <BR></BR>
+      <BR></BR>
   
-     
+       <p:outputLabel for="oneBtn" value="Souhaitez-vous mettre en place un versement programmé?"/>
+                    <p:selectOneButton id="oneBtn" value="#{contractBean.program}">
+                        <f:selectItem itemLabel="Oui" itemValue="yes"/>
+                      
+                        <f:selectItem itemLabel="Non" itemValue="non"/>
+                  
+                    </p:selectOneButton>
+                    
+                <BR></BR>
+                     <p:outputLabel for="periodicite" value="Périodicité"/>
+          <p:selectOneMenu id="periodicite" value="#{contractBean.period}">
+                          
+                        <f:selectItem itemLabel="Mensuel" itemValue="mensuel"/>
+                      
+                        <f:selectItem itemLabel="Trimestriel" itemValue="trimestriel"/>
+                        <f:selectItem itemLabel="Semestriel" itemValue="semestriel"/>
+                      
+                        <f:selectItem itemLabel="Annuel" itemValue="annuel"/>
+                      
+                </p:selectOneMenu> 
+                     
+                  
+                
+               <BR></BR>
+               <p:outputLabel  value="Montant du versement permanent " />  
+                
+                   <p:inputText for="input" value="#{contractBean.versement}" required="true" /> 
+                         
+               <BR></BR>   <BR></BR>             
+                         
+                         <p:outputLabel  value="Date du premier versement"/>
+                    <p:calendar id="calendar1" value="#{contractBean.dateVersement}" showOn="button"  />
+                         
+           <BR></BR>   <BR></BR>     
+           
+        
 
-     
-</p:panelGrid>
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+              <h:commandButton id="VALIDER" value="Next" action="#{contractBean.GoContrat()}" class="btn btn-primary" style=" margin-left: 590px;width:90px;height:40px"  />
+                <h:commandButton id="RETOUR" value="Previous" action="#{contractBean.goToMandat()}" class="btn btn-primary" style=" margin-LEFT:-200px;width:90px;height:40px"/>
+              
           
+         
+</p:panelGrid>
+      
             </div>
+            
+            
          </h:form>
+      
       </p:panel>
     
     </ui:define>

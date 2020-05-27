@@ -2,6 +2,8 @@
 package services;
 
 import java.awt.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -44,11 +46,12 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	@Override
 	public int addContract(Contract contract) {
 
-		  contract.setNoticeContract(null);
-		  contract.setState("en cours");
-	//	  contract.setScore(30);
 		
-		//  contract.setGain();
+	
+		  contract.setState("en cours");
+		  LocalDateTime localDateTime = LocalDateTime.now();
+		  contract.setStart_date(Date.from( localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+		
 	      em.persist(contract);
 	      return contract.getId_Contract();
 	}
@@ -63,7 +66,7 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	@Override
 	public void updateContract(Contract contract) {
 		Contract contract1=em.find(Contract.class, contract.getId_Contract());
-		contract1.setDescription(contract1.getDescription());	
+//		contract1.setDescription(contract1.getDescription());	
 
 	}
 
@@ -171,35 +174,36 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	@Override
 	public int EstimatedScore(Contract contrat,int id) {
-		int scoreAL =0;
-		int scoreSP=0;
-
-	
-		ContractType AL= ContractType.all_in;
-    	ContractType SP= ContractType.specified;
-    
-	    if((contrat.getContract_type().equals(AL)) && (contrat.getGain()<CalculGainClient(contrat)))
-	    {
-	    	scoreAL+=30;
-	    } else {scoreAL+=0;}
-	    if((contrat.getContract_type().equals(SP)) && (contrat.getGain()<CalculGainClient(contrat)))
-	    {
-	    	scoreSP+=10;
-	    }
-	    else {scoreSP+=0;}
-	    
-	 
-	    if((contrat.getContract_type().equals(SP)) && (contrat.getGain()<CalculGainClient(contrat)))
-	    {
-	    	{ for (int i = 0; i<scoreS.size(); i++) 
-		           scoreS.add( scoreSP);}
-       
-           return scoreSP;}
-   	    
-           
-	       else { for (int i = 0; i<scoreA.size(); i++) 
-	           scoreA.add( scoreAL);}
-	       {       return scoreAL;
+	int scoreAL =0;
+//		int scoreSP=0;
+//
+//	
+//		ContractType AL= ContractType.all_in;
+//    	ContractType SP= ContractType.specified;
+//    
+//	    if((contrat.getContract_type().equals(AL)) && (contrat.getGain()<CalculGainClient(contrat)))
+//	    {
+//	    	scoreAL+=30;
+//	    } else {scoreAL+=0;}
+//	    if((contrat.getContract_type().equals(SP)) && (contrat.getGain()<CalculGainClient(contrat)))
+//	    {
+//	    	scoreSP+=10;
+//	    }
+//	    else {scoreSP+=0;}
+//	    
+//	 
+//	    if((contrat.getContract_type().equals(SP)) && (contrat.getGain()<CalculGainClient(contrat)))
+//	    {
+//	    	{ for (int i = 0; i<scoreS.size(); i++) 
+//		           scoreS.add( scoreSP);}
+//       
+//           return scoreSP;}
+//   	    
+//           
+//	       else { for (int i = 0; i<scoreA.size(); i++) 
+//	           scoreA.add( scoreAL);}
+//	       { 
+		return scoreAL;
 }
 	
 	       
@@ -221,7 +225,7 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	
 	
-	}
+	
 
 	@Override
 	public Boolean ifExists(Contract C) {
@@ -242,107 +246,12 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 		}
 
 
-	@Override
-	public void send_Email(String msg, String adress,String subject)throws MessagingException {
-
-		final String username = "sarra.youssef@gmail.com";
-	    final String password = "183JFT0494";
-	    String host="smtp.gmail.com"; 
-	    
-	    
-	    Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.from",username);
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
-        props.setProperty("mail.debug", "true");
-
-        
-	    Session session = Session.getInstance(props,null);                            
-	 
-		MimeMessage message = new MimeMessage(session);
-		message.setRecipients(Message.RecipientType.TO, adress);
-		message.setSubject(subject);
-		message.setSentDate(new Date());
-		message.setText(msg);
-        
-		Transport transport = session.getTransport("smtp");
-
-        transport.connect(username, password);
-        transport.sendMessage(message, message.getAllRecipients());
-        transport.close();
-	}
-
-	@Override
-	public int scoreClient(User pk) {
 	
-		int score=0;
-		
-		int idClient1;
-		idClient1=pk.getId_user();
-		User client = em.find(User.class, idClient1);
-		if (client.getSalaire()<1000) 
-		{     
-			score += 10;
-		}
-		else if (client.getSalaire()>=1000 && client.getSalaire()<=3000)
-		{
-			score += 30;
-		}
-		else if (client.getSalaire()>3000 && client.getSalaire()<10000)
-		{
-			score += 50;
-		}
-		else
-		{
-			score +=100;
-		}
-		
-		if (client.getAge()<=30)
-		{
-			score +=10;
-		}
-		else if (client.getAge()>30 && client.getAge()<55)
-		{
-			score +=30;
-		}
-		else
-		{
-			score +=50;
-		}
-		
-		if (client.getEtatCivil().equals("marie"))
-		{
-			score +=10;
-		}
-		else if (client.getEtatCivil().equals("celibataire") || client.getEtatCivil().equals("divorce"))
-		{
-			score +=20;
-		}
-		else 
-		{
-			score +=0;
-		}
-		
-		if (client.getMetier().equals("financier") || client.getMetier().equals("homme d'affaires"))
-		{
-			score +=100;
-		}
-		else 
-		{
-			score += 30;
-		}
-		
-		return score;
-	
-	}	
 	
 	@Override
 	public User affecterAssetManagerClient (Contract c) {
-		TypedQuery <User> query=em.createQuery("SELECT * from User u where u.role='asset_manager' AND u.score>=? ",User.class)
-				              .setParameter(1,c.getScore())
+		TypedQuery <User> query=em.createQuery("SELECT * from User u where u.role='asset_manager' ",User.class)
+				            
 				              .setParameter (2,true);
 		
 		User u= query.getSingleResult();

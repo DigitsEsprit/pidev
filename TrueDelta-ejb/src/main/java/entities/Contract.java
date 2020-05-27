@@ -21,63 +21,48 @@ public class Contract implements Serializable {
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	@Column(name="ID_CONTRACT")
 	private int id_Contract;
-	@Column(name="DESCRIPTION")
-	private String description;
 	@Column(name="START_DATE")
 	private Date start_date;
-	@Column(nullable=true)
-	private Date  processing_date;
-	public Date getProcessing_date() {
-		return processing_date;
-	}
-	public void setProcessing_date(Date processing_date) {
-		this.processing_date = processing_date;
-	}
-
+	
 	@Column(name="END_DATE")
 	private Date end_date;
 	@Column(name="CONTRACT_TYPE")
 	@Enumerated(EnumType.STRING)
 	private ContractType contract_type;
+	
+	@Column(name="PORTFOLIO_TYPE")
+	@Enumerated(EnumType.STRING)
+	private PortfolioType portfolio_type;
 	@Column(name="RISK")
 	private double risk;
 	@Column(name="SIGNATURE")
 	private String signature;
-	@Column(name="GAIN")
-	private double gain;
-	@Column(name="CLIENT_PERCENTAGE")
-	private double percentage_client;
-	@Column(name="BROKER_PERCENTAGE")
-	private double percentage_broker;
-	@Column(name="AM_PERCENTAGE")
-	private double percentage_AM;
 	@Column(name="CAPITAL")
 	private double capital;
 	@Column(nullable=true)
 	private String State;
 	
-	@Column(name="SCORE")
-	private int score;
-	@Column(nullable=true)
-	private String NoticeContract;
-	public int getScore() {
-		return score;
-	}
-	public void setScore(int score) {
-		this.score = score;
-	}
+	@Column(name="IBAN")
+	private String IBAN;
+	
+	@Column(name="MONTANT_VERSEMENT")
+	private double MontantVersement;
+	
+	@Column(name="DATE_PREMIERVERSEMENT")
+	private Date DatePremierVersement;
+	
+	@Column(name="PERIODICITE_VERSEMENT")
+	@Enumerated(EnumType.STRING)
+	private PeriodiciteVersement periodicite;
+	
+	
 	public int getId_Contract() {
 		return id_Contract;
 	}
 	public void setId_Contract(int id_Contract) {
 		this.id_Contract = id_Contract;
 	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+
 	public Date getStart_date() {
 		return start_date;
 	}
@@ -108,53 +93,14 @@ public class Contract implements Serializable {
 	public void setSignature(String signature) {
 		this.signature = signature;
 	}
-	public double getGain() {
-		return gain;
-	}
-	public void setGain(double gain) {
-		this.gain = gain;
-	}
-	public double getPercentage_client() {
-		return percentage_client;
-	}
-	public void setPercentage_client(double percentage_client) {
-		this.percentage_client = percentage_client;
-	}
-	public double getPercentage_broker() {
-		return percentage_broker;
-	}
-	public void setPercentage_broker(double percentage_broker) {
-		this.percentage_broker = percentage_broker;
-	}
-	public double getPercentage_AM() {
-		return percentage_AM;
-	}
-	public void setPercentage_AM(double percentage_AM) {
-		this.percentage_AM = percentage_AM;
-	}
+	
 	public double getCapital() {
 		return capital;
 	}
 	public void setCapital(double capital) {
 		this.capital = capital;
 	}
-	public Contract(int id_Contract, String description, Date start_date, Date end_date, ContractType contract_type,
-			double risk, String signature, double gain, double percentage_client, double percentage_broker,
-			double percentage_AM, double capital) {
-		super();
-		this.id_Contract = id_Contract;
-		this.description = description;
-		this.start_date = start_date;
-		this.end_date = end_date;
-		this.contract_type = contract_type;
-		this.risk = risk;
-		this.signature = signature;
-		this.gain = gain;
-		this.percentage_client = percentage_client;
-		this.percentage_broker = percentage_broker;
-		this.percentage_AM = percentage_AM;
-		this.capital = capital;
-	}
+	
 	public Contract() {
 		
 	}
@@ -177,83 +123,67 @@ public class Contract implements Serializable {
 	public void setUser2(User user2) {
 		this.user2 = user2;
 	}
-	public Contract(String description) {
-		super();
-		this.description = description;
-	}
-	public Contract(String description, double gain, double percentage_AM, double capital) {
-		super();
-		this.description = description;
-		this.gain = gain;
-		this.percentage_AM = percentage_AM;
-		this.capital = capital;
-		
-	}
-	public Contract(String description, ContractType contract_type) {
-		super();
-		this.description = description;
-		this.contract_type = contract_type;
-		
-	}
-	public Contract(String description, ContractType contract_type, double risk, String signature, double gain,
-			double percentage_client, double percentage_broker, double percentage_AM, double capital) {
-		super();
-		this.description = description;
-		this.contract_type = contract_type;
-		this.risk = risk;
-		this.signature = signature;
-		this.gain = gain;
-		this.percentage_client = percentage_client;
-		this.percentage_broker = percentage_broker;
-		this.percentage_AM = percentage_AM;
-		this.capital = capital;
-	}
-	public Contract(String description, double gain) {
-		super();
-		this.description = description;
+
 	
-		this.gain = gain;
-	}
 	public String getState() {
 		return State;
 	}
 	public void setState(String state) {
 		State = state;
 	}
-	public String getNoticeContract() {
-		return NoticeContract;
+	
+	public String getIBAN() {
+		return IBAN;
 	}
-	public void setNoticeContract(String noticeContract) {
-		NoticeContract = noticeContract;
+	public void setIBAN(String iBAN) {
+		IBAN = iBAN;
 	}
-	public Contract(Date start_date, Date end_date, ContractType contract_type, double capital,double gain,String Signature) {
+	public double getMontantVersement() {
+		return MontantVersement;
+	}
+	public void setMontantVersement(double montantVersement) {
+		MontantVersement = montantVersement;
+	}
+	public Date getDatePremierVersement() {
+		return DatePremierVersement;
+	}
+	public void setDatePremierVersement(Date datePremierVersement) {
+		DatePremierVersement = datePremierVersement;
+	}
+	
+	public PeriodiciteVersement getPeriodicite() {
+		return periodicite;
+	}
+	public void setPeriodicite(PeriodiciteVersement periodicite) {
+		this.periodicite = periodicite;
+	}
+	public Contract(Date start_date, Date end_date, ContractType contract_type, double capital,String Signature) {
 		super();
 	
 		this.start_date = start_date;
 		this.end_date = end_date;
 		this.contract_type = contract_type;
 		this.capital = capital;
-		this.gain = gain;
-		this.signature = signature;
-		
-	}
-	public Contract(Date start_date, Date end_date, double capital,double risk,String Signature, double percentage_client, double percentage_AM) {
-		super();
-	
-		this.start_date = start_date;
-		this.end_date = end_date;
 
-		this.capital = capital;
-		this.risk = risk;
 		this.signature = signature;
-		this.percentage_client = percentage_client;
-		this.percentage_AM = percentage_AM;
 		
 	}
-	public Contract(double capital, int score) {
+
+
+	public PortfolioType getPortfolio_type() {
+		return portfolio_type;
+	}
+	public void setPortfolio_type(PortfolioType portfolio_type) {
+		this.portfolio_type = portfolio_type;
+	}
+	public Contract(double capital, String iBAN,double montantVersement, Date datePremierVersement) {
 		super();
+		
 		this.capital = capital;
-		this.score = score;
+		IBAN = iBAN;
+		MontantVersement = montantVersement;
+		DatePremierVersement = datePremierVersement;
+	
 	}
 	
 	
