@@ -3,7 +3,7 @@ package tn.esprit.managedBeans;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -347,7 +347,7 @@ public void ProfilInvestisseur() throws IOException {
 				DESCRIPTION="Vous êtes donc prêt à valoriser un capital à moyen terme, grâce à une diversification par classe d’actifs, tout en bénéficiant d’un risque équilibré.";
 				contrat="Au regard de votre profil investisseur équilibré, nous vous conseillons la Gestion libre";}
 		else 
-		    if ((NIVEAU.equals("RisqueEleve")) && (typePortefeuille.equals("PortfolioD"))){
+		    if ((NIVEAU.equals("RisqueEleve"))&& (typePortefeuille.equals("PortfolioD"))){
 					System.out.println("Dynamique ");
 					PROFIL="Investisseur Dynamique" ;
 					DESCRIPTION="Vous êtes donc prêt à accepter un risque de perte en capital. Vous maîtrisez les produits et instruments financiers,vous permettant d'investir essentiellement sur des supports en unités de comptes.";
@@ -403,8 +403,18 @@ public String addContract() {
 	return "ContratDone?faces-redirect=true";
 	}
 
+private List<Contract> o;
 
+public List<Contract> GetAllcontracts()
+{  o= CSR.findAll();
 
+return o;
+}
+
+public void MatchedContract()
+{  CSR.Matched();
+  
+}
 
 public void setStart_date(Date start_date) {
 	this.start_date = start_date;

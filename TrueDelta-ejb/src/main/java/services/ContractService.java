@@ -2,6 +2,8 @@
 package services;
 
 import java.awt.List;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.OptionalDouble;
 import java.util.Properties;
 
 import javax.ejb.LocalBean;
+import javax.ejb.Schedule;
 import javax.ejb.Stateful;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -32,6 +35,19 @@ import entities.User;
 import interfaces.ContractServiceLocal;
 import interfaces.ContractServiceRemote;
 
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.hssf.record.chart.DataFormatRecord;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 @Stateful
 @LocalBean 
 
@@ -45,9 +61,6 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	@Override
 	public int addContract(Contract contract) {
-
-		
-	
 		  contract.setState("en cours");
 		  LocalDateTime localDateTime = LocalDateTime.now();
 		  contract.setStart_date(Date.from( localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
@@ -77,10 +90,11 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	}
 	@Override
 	public List FindContractByEtat(String state) {
-		TypedQuery<Contract> contracts = em.createQuery("select c from Contracts c where c.State = :State",Contract.class);
+		TypedQuery<Contract> contracts = em.createQuery("select c from Contracts c where c.State ='en cours'",Contract.class);
 		contracts.setParameter("State", state);
 		return (List) contracts.getResultList();
 	}
+	
 
 	@Override
 	public List FindContractByDate() {
@@ -102,13 +116,20 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	}
 	
 	@Override
-	public List findAllContracts() {
-		
-		List contracts=(List) em.createQuery("contracts",Contract.class).getResultList();
-		
-		return contracts;
-	}
+	
 
+	public java.util.List<Contract> findAll() {
+			java.util.List<Contract> c = em.createQuery("SELECT c FROM  Contract c ", Contract.class).getResultList();
+		System.out.println("list Contract : ");
+		return c;
+	}
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public double CalculGainAsset(Contract con) {
 		
@@ -206,25 +227,7 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 		return scoreAL;
 }
 	
-	       
-
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	  
 	
 
 	@Override
@@ -235,28 +238,74 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 			return true;
 	}
 	
-	@Override
-	public int addBond(Contract C) {		 
-		if (ifExists(C) == false) {
-			em.persist(C);
-			System.out.println("Contract:" + C.getId_Contract());
-			return C.getId_Contract();
-		} else
-			return (Integer) null; 
-		}
 
 
 	
 	
+//	@Override
+//	public User affecterAssetManagerClient (Contract c) {
+//		TypedQuery <User> query=em.createQuery("SELECT * from User u where u.role='asset_manager' ",User.class)
+//				            
+//				              .setParameter (2,true);
+//		
+//		User u= query.getSingleResult();
+//		c.setUser2(u);
+//		return c.getUser2();
+//	}
+	
+	
+	
+	@Schedule(second="*/1", minute="*", hour="*", persistent=false)	
 	@Override
-	public User affecterAssetManagerClient (Contract c) {
-		TypedQuery <User> query=em.createQuery("SELECT * from User u where u.role='asset_manager' ",User.class)
-				            
-				              .setParameter (2,true);
-		
-		User u= query.getSingleResult();
-		c.setUser2(u);
-		return c.getUser2();
+	public boolean Matched()
+	{
+		java.util.List<Contract> liste1= findAll();
+			System.out.println("Inside Matching function");
+	    	try {
+	    		FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\ASUS\\Desktop\\MatchingSS.xlsx"));
+	    		XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+		    	XSSFSheet sheet = workbook.getSheetAt(0);
+		   for(Row row : sheet)
+				{
+	
+			   row.getCell(0).setCellType(CellType.STRING);
+			   row.getCell(1).setCellType(CellType.STRING);
+			   String  IBAN=row.getCell(0).getStringCellValue();
+			   String Capital=row.getCell(1).getStringCellValue();
+			   Double capital= Double.valueOf(Capital);
+			   
+				for (Contract c : liste1)
+				{      
+			        	if(c.getIBAN().equals(IBAN))
+						  
+			        	 { 
+			        		   if((c.getCapital()==capital)||(c.getCapital()<capital)) 
+			        		        {
+			        			   c.setState("traité validé"); 
+			        			   System.out.println("Matched");
+			        			   System.out.println("base CAPITAL"+c.getCapital()+"CAPITAL FICHIER"+capital);
+			        			   System.out.println("base IBAN"+c.getIBAN()+"IBAN FICHIER"+IBAN);
+			        			
+			        		         }
+			        		     else {
+			        			     c.setState("refusé");
+			        		         System.out.println("non Matched");
+			        		         System.out.println("base IBAN"+c.getIBAN()+"IBAN FICHIER"+IBAN);
+		        			         System.out.println("base CAPITAL"+c.getCapital()+"CAPITAL FICHIER"+capital);
+			        		          }
+			        		} 
+			        	
+			        	
+					      }    
+			     	
+				}
+				
+				}  
+		   catch(Exception e) {
+			   System.out.println(e.getMessage());
+			}
+			return true;	
+		 
 	}
 	
 	
@@ -264,25 +313,41 @@ public class ContractService implements ContractServiceLocal, ContractServiceRem
 	
 	
 	
-	
-	
-}
+	@Override
+	public void sendMail(String email) {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "465");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication("sarra.youssef@esprit.tn", "sarra1234Y");
+			}
+		});
+
+		try {
+			MimeMessage msg = new MimeMessage(session);
+			User user = em.createQuery("select u from User u where u.email=:email", User.class)
+					.setParameter("email", email).getSingleResult();
+			msg.setFrom(new InternetAddress("sarra.youssef@esprit.tn"));
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+			msg.setSubject("Forgetten password");
+			msg.setSentDate(new Date());
+			msg.setText("Change your password here: http://localhost:9080/TrueDelta-web/pages/newpassword.xhtml?token=");
+			Transport.send(msg);
+		} catch (MessagingException mex) {
+			System.out.println("send failed, exception: " + mex);
+		}
+
+	}
 
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+}
 	
 		     	
