@@ -3,7 +3,6 @@ package services;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -44,13 +43,15 @@ ComplainService complainservice;
 		
 
 	}
-
+	
 	@Override
 	public List<ComplainsStatistics> GetAllStatComplaint() {
 		TypedQuery<ComplainsStatistics> q = em.createQuery("SELECT c FROM ComplainsStatistics c", ComplainsStatistics.class);
 		return (List<ComplainsStatistics>) q.getResultList();
 	}
 
+	
+	
 	@Override
 	public List<ComplainsStatistics> GetStatComplaintByDate(Date d) {
 		TypedQuery<ComplainsStatistics> q = em.createQuery("SELECT c FROM ComplainsStatistics c WHERE c.DateStat= :datestat", ComplainsStatistics.class);

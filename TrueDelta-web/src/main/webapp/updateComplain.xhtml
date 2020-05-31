@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="flat" value="#{layoutMB.flat}" converter="javax.faces.Boolean"/>
+        </f:metadata>
+
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-g-12, .ui-sm-12 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .ui-datagrid-column .ui-panel.ui-widget-content {
+                border: none;
+            }
+
+
+        </style>
+    </ui:define>
+
+    <ui:define name="title">
+        Forms
+    </ui:define>
+
+    <ui:define name="description">
+        Example of form controls
+    </ui:define>
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Forms"/>
+        <h:form>
+          
+            <p:spacer height="15px"/>
+            
+            <div class="ui-fluid #{layoutMB.flat ? 'ui-flat':''}">
+                <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                             layout="grid" styleClass="ui-fluid card">
+                  
+                    <p:outputLabel value="subject" for="subject"/>
+                    <p:inputText  id="subject" value="#{ComplainBean.subject}"/>
+
+				          
+                            
+                    <p:outputLabel value="description" for="description"/>
+                    <p:inputTextarea id="description" value="#{ComplainBean.description}"/>
+					
+					
+					<p:outputLabel value="date" for="date"/>
+                    <p:inputTextarea id="date" value="#{ComplainBean.date}" readonly="true"/>
+                    
+                    
+                    <p:outputLabel value="state" for="state"/>
+                    <p:inputTextarea id="state" value="#{ComplainBean.state}" readonly="true"/>
+
+                    <p:commandButton action="#{ComplainBean.updateComplaint()}" value="update"/>
+               
+              </p:panelGrid>    
+            </div>
+        </h:form>
+        
+        
+    </ui:define>
+
+  
+   
+
+
+    
+</ui:composition>
+
+
+
+   
+
+   
+                    

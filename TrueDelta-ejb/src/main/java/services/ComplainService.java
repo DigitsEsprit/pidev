@@ -111,6 +111,16 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
 	}
 	
 	@Override
+    public List<Complain> GetReclamByclient(int CltID) {
+
+        TypedQuery<Complain> q = em.createQuery("SELECT R FROM Complain R WHERE R.user.id_user = :CltID",
+        		Complain.class);
+        
+        q.setParameter("CltID", CltID);
+        return (List<Complain>) q.getResultList();
+    }
+	
+	@Override
 	public List<Complain> SearchComplain(String motcle) {
 		TypedQuery<Complain> query = em.createQuery(
 				"select c from Complain c WHERE c.description LIKE :code or c.subject LIKE :code or c.state LIKE :code ORDER BY c.date DESC",
@@ -120,9 +130,8 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
 	}
 	
 
-	
 	@Override
-    public void TreatComplaint(int id_complain, String state,int id_investor,String reponse) {
+    public void TreatComplaint(int id_complain, String state,String reponse) {
 
        /* User investor = em.find(User.class, id_investor); 
         if(investor.getRole()==Role.investor)
@@ -156,9 +165,9 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
 
             try {
 
-                mail.sendMail(complain.getUser().getEmail(), "Your complaint is treated",
+                mail.sendMail(complain.getUser().getEmail(), "Your complaint where",
                         complain.getSubject() + " is treated at " + complain.getClosingDate()
-                                + " with state : " + complain.getState());
+                                + " with state : " + complain.getState() );
 
             } catch (MessagingException e) {
                 System.out.println("error");
@@ -220,7 +229,7 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
          for (int i = 0; i < maList.size(); i++) {
              myMorphoMatchMap.putAll(EditDistance.calculate(maList.get(i), descIn));
          }
-         if (myMorphoMatchMap.firstKey() < 50) {
+         if (myMorphoMatchMap.firstKey() < 255) {
              bestMatch = myMorphoMatchMap.get(myMorphoMatchMap.firstKey());
 
              TypedQuery<Complain> q = em.createQuery("SELECT R FROM Complain R WHERE R.description =:match",
@@ -229,8 +238,7 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
              List<Complain> recMatch =q.getResultList();
              System.out.println(recMatch.size());
              complain.setReponse(recMatch.get(0).getReponse()+"   "+" ( Cette Reponse est envoyé automatique par notre system )  ");
-             complain.setState(State.inprogress);
-
+             complain.setState(State.treated_automatically);
 
          }
          else {
@@ -242,8 +250,10 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
      }
 	 
 	 
+ 
 	 
-	
+	 
+	 
 	 
 	 
 	@Override

@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name="COMPLAINS")
 
@@ -130,6 +132,8 @@ public class Complain implements Serializable {
 	}
 	public Complain() {}
 	@ManyToOne	
+	@JsonBackReference
+
 	private User user;
 	private User admin;
 	private User investor;

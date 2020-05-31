@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="flat" value="#{layoutMB.flat}" converter="javax.faces.Boolean"/>
+        </f:metadata>
+
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-g-12, .ui-sm-12 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .ui-datagrid-column .ui-panel.ui-widget-content {
+                border: none;
+            }
+
+
+        </style>
+    </ui:define>
+
+    <ui:define name="title">
+        Forms
+    </ui:define>
+
+    <ui:define name="description">
+        Example of form controls
+    </ui:define>
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Forms"/>
+        <h:form>
+            <div>
+                <p:tooltip for="flat-switch" escape="false" position="top" value="Turns flat borders on, just add &lt;code&gt;ui-flat&lt;/code&gt; to a parent div."/>
+                <p:outputLabel value="Flat borders?" for="flat-switch"/>
+                <p:inputSwitch id="flat-switch" value="#{layoutMB.flat}">
+                    <p:ajax update="@form @(.ui-tabs)"/>
+                </p:inputSwitch>
+            </div>
+
+
+                <div class="ui-g-12">
+   
+                
+                    <p:panel header="DataTable" styleClass="card no-border">
+                       
+                        <p:dataTable var="Comp" value="#{ComplainBean.complains}" widgetVar="Table" rows="100">                     
+                
+          
+                            <p:column headerText="Id">
+                                <h:outputText value="#{Comp.id_Reclamation}"/>
+                            </p:column>
+
+                            <p:column headerText="Date">
+                                <h:outputText value="#{Comp.date}"/>
+                            </p:column>
+
+                            <p:column headerText="Description">
+                                <h:outputText value="#{Comp.description}"/>
+                            </p:column>
+
+                            <p:column headerText="Subjet">
+                                <h:outputText value="#{Comp.subject}"/>
+                            </p:column>
+                            
+                            <p:column headerText="State">
+                                <h:outputText value="#{Comp.state}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Response">
+                                <h:outputText value="#{Comp.reponse}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Action">
+                             <p:commandButton action="#{ComplainBean.removeComplaint2(Comp.id_Reclamation)}"  class="btn-danger" onclick="return confirm('Voulez-vous suprimer votre réclamation ?')" value="delete"> 
+                              <i class="icon-delete icon-white" />
+                              </p:commandButton>
+                             <p:commandButton action="#{ComplainBean.goToTreatComplain(Comp)}"  onclick="return confirm('Voulez-vous Vraiment prendre en charge cette réclamation maintenant?')" value="treat"/>
+                             
+                            </p:column>
+                              
+                        </p:dataTable>
+                 
+                    </p:panel>
+                </div>
+
+        </h:form>
+    </ui:define>
+
+   
+</ui:composition>
+
+                

@@ -1,6 +1,6 @@
 package entities;
 
 public enum State {
-	Opened,inprogress,treated
+	Opened,inprogress,treated,treated_automatically
 	
 }
