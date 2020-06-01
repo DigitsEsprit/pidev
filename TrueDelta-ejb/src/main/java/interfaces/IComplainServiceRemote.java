@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 import entities.Complain;
+import entities.State;
 
 @Remote
 public interface IComplainServiceRemote {
@@ -22,6 +23,7 @@ public interface IComplainServiceRemote {
 	public Complain AffectComplaintsToAdmin(int id);
     public void TreatComplaint(int id_complain, String state,String reponse);
     public String verifBadWord(int idRec ) throws InterruptedException;
+    public List<State> GetComplaintState();
 
 	}
 

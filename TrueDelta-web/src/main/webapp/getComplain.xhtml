@@ -59,6 +59,7 @@
                        
                         <p:dataTable var="Comp" value="#{ComplainBean.complains}" widgetVar="Table" rows="100">                     
                 
+           
           
                             <p:column headerText="Id">
                                 <h:outputText value="#{Comp.id_Reclamation}"/>
@@ -76,8 +77,17 @@
                                 <h:outputText value="#{Comp.subject}"/>
                             </p:column>
                             
-                            <p:column headerText="State">
+                            <p:column headerText="State"  filterBy="#{Comp.state}" footerText="exact" filterMatchMode="exact">
+                             <f:facet name="filter">
+                <p:selectOneMenu   onchange="PF('Table').filter()" styleClass="custom-filter">
+                    <f:selectItem itemLabel="all" itemValue="#{null}" noSelectionOption="true" />
+                     
+            
+                    <f:selectItems value="#{ComplainBean.states}" />
+                </p:selectOneMenu>
+            </f:facet>
                                 <h:outputText value="#{Comp.state}"/>
+                                
                             </p:column>
                             
                             <p:column headerText="Response">

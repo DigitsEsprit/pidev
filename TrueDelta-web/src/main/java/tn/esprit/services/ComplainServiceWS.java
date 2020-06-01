@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,6 +21,10 @@ public class ComplainServiceWS {
 	@EJB
 	ComplainService complain;
 	
+	private final String status = "{\"status\":\"ok\"}";
+	
+
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allcomp")
@@ -34,5 +39,20 @@ public class ComplainServiceWS {
 		return complain.GetComplaintsByState(state);
 	}
 
+	@DELETE
+	@Path("delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteComplain(@PathParam("id") int id) {
+		complain.deleteComplain(id);
+		return Response.status(200).entity(status).build();
+	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("searchcomplaint/{motcle}")
+	public List<Complain> SearchComplaint(@PathParam("motcle") String motcle) {
+		return complain.SearchComplain(motcle);
+	}
+	
+	 
 }

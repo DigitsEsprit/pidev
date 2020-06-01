@@ -1,8 +1,12 @@
 package tn.esprit.managedBeans;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.faces.bean.*;
+
+
 import entities.Complain;
 import entities.ComplainsStatistics;
 import entities.State;
@@ -45,11 +49,14 @@ public class ComplainBean implements Serializable {
 
 	
 	private List<Complain> complains;
+
 	private List<Complain> complainsClient;
 	private List<ComplainsStatistics> complainstat;
-	private List<String> filtre;
+	private List<State> states = new ArrayList<State>();
 	
-	//getters
+	
+	
+	
 	
 	
 	public List<Complain> getComplains() {
@@ -282,15 +289,29 @@ public class ComplainBean implements Serializable {
 
 
 
-	public List<String> getFiltre() {
-		return filtre;
+	public List<State> getStates() {
+		states=complainservice.GetComplaintState();
+		return states;
 	}
 
 
 
-	public void setFiltre(List<String> filtre) {
-		this.filtre = filtre;
+	public void setStates(List<State> states) {
+		this.states = states;
 	}
+
+
+
+	
+
+
+
+	
+
+
+	
+
+
 
 
 

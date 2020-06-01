@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 import entities.Complain;
+import entities.State;
 
 
 @Local
@@ -23,6 +24,7 @@ public interface IComplainServiceLocal {
 	public Complain AffectComplaintsToAdmin(int id);
     public void TreatComplaint(int id_complain, String state,String reponse);
     public String verifBadWord(int idRec ) throws InterruptedException;
+    public List<State> GetComplaintState();
 
 
 

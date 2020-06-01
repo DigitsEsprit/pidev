@@ -85,6 +85,13 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
 	}
 	
 	@Override
+	public List<State> GetComplaintState() {
+		TypedQuery<State> q = em.createQuery("SELECT DISTINCT c.state FROM Complain c ",
+				State.class);
+		return (List<State>) q.getResultList();
+	}
+	
+	@Override
 	public int NbComplaintByState(String state) {
 		State st = State.valueOf(state);
 		Query q = em.createQuery("SELECT Count(c) FROM Complain c WHERE c.state = :state");
