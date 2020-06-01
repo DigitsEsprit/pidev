@@ -80,7 +80,7 @@
                             <p:column headerText="State"  filterBy="#{Comp.state}" footerText="exact" filterMatchMode="exact">
                              <f:facet name="filter">
                 <p:selectOneMenu   onchange="PF('Table').filter()" styleClass="custom-filter">
-                    <f:selectItem itemLabel="all" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItem itemLabel="Select all" itemValue="#{null}" noSelectionOption="true" />
                      
             
                     <f:selectItems value="#{ComplainBean.states}" />
