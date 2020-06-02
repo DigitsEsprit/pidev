@@ -40,11 +40,10 @@ public class ComplainServiceWS {
 	}
 
 	@DELETE
-	@Path("delete/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteComplain(@PathParam("id") int id) {
-		complain.deleteComplain(id);
-		return Response.status(200).entity(status).build();
+	@Path("delete/{id_Reclamation}")
+	public Response deleteComplain(@PathParam("id_Reclamation") int id_Reclamation) {
+		complain.deleteComplain(id_Reclamation);
+		return Response.status(200).entity("complain is deleted").build();
 	}
 
 	@GET
