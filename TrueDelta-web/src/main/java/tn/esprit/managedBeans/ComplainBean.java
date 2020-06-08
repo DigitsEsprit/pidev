@@ -36,14 +36,7 @@ public class ComplainBean implements Serializable {
 	public String AddComplaint() throws InterruptedException {
 		Complain c = new Complain(description,new Date(),subject,state);
 		complainservice.AddComplaint(c,3);
-		 try {
-			 complainservice.verifBadWord(c.getId_Reclamation());
-	            }
-	            catch ( Exception e)
-	            {
-	             System.out.println("errrrrrrr");
-	             e.getMessage();
-	             }
+		
 		 
 	    return "/getClientComplain.xhtml?faces-redirect=true";
 	}

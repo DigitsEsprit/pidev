@@ -173,8 +173,8 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
 
             try {
 
-                mail.sendMail(complain.getUser().getEmail(), "Your complaint where",
-                        complain.getSubject() + " is treated at " + complain.getClosingDate()
+                mail.sendMail(complain.getUser().getEmail(), "Your complaint is treated where subject is",
+                        complain.getSubject() + " was treated at " + complain.getClosingDate()
                                 + " with state : " + complain.getState() );
 
             } catch (MessagingException e) {
