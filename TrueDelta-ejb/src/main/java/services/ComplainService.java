@@ -31,7 +31,7 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
 	Mail_API mail;
 
 	@Override
-	public int AddComplaint(Complain complaint , int id_investor) {	
+	public int AddComplaint(Complain complaint , int id_investor) throws InterruptedException {	
 		 User investor = em.find(User.class, id_investor); 
 		 
 	        if(investor.getRole()==Role.investor)
@@ -41,6 +41,7 @@ public class ComplainService implements IComplainServiceRemote,IComplainServiceL
 
           em.persist(complaint);
           MatchingReponse(complaint.getId_Reclamation());
+          verifBadWord(complaint.getId_Reclamation());
           return 1;
           }
           else

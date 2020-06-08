@@ -34,15 +34,15 @@
     </ui:define>
 
     <ui:define name="title">
-        Forms
+        Welcome in your space
     </ui:define>
 
     <ui:define name="description">
-        Example of form controls
+        of claims
     </ui:define>
 
     <ui:define name="body">
-        <adm:breadcrumb title="Forms"/>
+        <adm:breadcrumb title="Welcome in your space"/>
       
          <div>
             <a href="/TrueDelta-web/addComplain.xhtml">Cliquez ici pour ajouter une réclamation</a>
@@ -54,9 +54,7 @@
                 <div class="ui-g-12">
                     <p:panel header="DataTable" styleClass="card no-border">
                         <p:dataTable var="Comp" value="#{ComplainBean.complainsClient}" rows="100">
-                            <p:column headerText="Id">
-                                <h:outputText value="#{Comp.id_Reclamation}"/>
-                            </p:column>
+                           
 
                             <p:column headerText="Date">
                                 <h:outputText value="#{Comp.date}" />

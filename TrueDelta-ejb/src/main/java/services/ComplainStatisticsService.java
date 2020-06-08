@@ -3,12 +3,18 @@ package services;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import entities.ComplainsStatistics;
+import entities.State;
 import interfaces.IComplainsStatisticsLocal;
 import interfaces.IComplainsStatisticsRemote;
 
@@ -50,6 +56,10 @@ ComplainService complainservice;
 		return (List<ComplainsStatistics>) q.getResultList();
 	}
 
+	
+	
+
+	
 	
 	
 	@Override

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.ejb.Local;
 
 import entities.ComplainsStatistics;
+import entities.State;
 
 @Local
 public interface IComplainsStatisticsLocal {

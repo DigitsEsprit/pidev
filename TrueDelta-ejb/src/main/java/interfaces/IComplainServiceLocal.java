@@ -11,7 +11,7 @@ import entities.State;
 @Local
 public interface IComplainServiceLocal {
 	
-	public int AddComplaint(Complain complaint, int id_investor);
+	public int AddComplaint(Complain complaint, int id_investor) throws InterruptedException;
 	public void deleteComplain(int id_c);
 	public void updateComplain(Complain complaint);
 	public List<Complain> GetAllComplaint();

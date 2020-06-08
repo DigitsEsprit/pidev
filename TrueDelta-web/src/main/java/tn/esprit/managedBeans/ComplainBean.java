@@ -1,10 +1,11 @@
 package tn.esprit.managedBeans;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 import javax.faces.bean.*;
+
 
 
 import entities.Complain;
@@ -32,7 +33,7 @@ public class ComplainBean implements Serializable {
 	@EJB
 	ComplainService complainservice;
 	
-	public String AddComplaint() {
+	public String AddComplaint() throws InterruptedException {
 		Complain c = new Complain(description,new Date(),subject,state);
 		complainservice.AddComplaint(c,3);
 		 try {
@@ -49,7 +50,6 @@ public class ComplainBean implements Serializable {
 
 	
 	private List<Complain> complains;
-
 	private List<Complain> complainsClient;
 	private List<ComplainsStatistics> complainstat;
 	private List<State> states = new ArrayList<State>();
@@ -73,19 +73,6 @@ public class ComplainBean implements Serializable {
 	}
 	
 	
-	
-	public List<ComplainsStatistics> getComplainstat() {
-		return complainstat;
-	}
-
-
-
-	public void setComplainstat(List<ComplainsStatistics> complainstat) {
-		this.complainstat = complainstat;
-	}
-
-
-
 	
 
 
@@ -149,8 +136,9 @@ public class ComplainBean implements Serializable {
 
 	}
 	
-	 
+	
 	public ComplainBean() {
+
 		super();
 	}
 
@@ -214,6 +202,18 @@ public class ComplainBean implements Serializable {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+	
+
+	public List<ComplainsStatistics> getComplainstat() {
+		return complainstat;
+	}
+
+
+
+	public void setComplainstat(List<ComplainsStatistics> complainstat) {
+		this.complainstat = complainstat;
+	}
+
 
 	public State getState() {
 		return state;
@@ -301,10 +301,39 @@ public class ComplainBean implements Serializable {
 	}
 
 
+	String  motcle;
+
+    private List<Complain> filteredComplain;
+
+    public void filteredComplain()
+    {
+		filteredComplain=complainservice.SearchComplain(motcle);
+
+    }
+    
+	public List<Complain> getFilteredComplain() {
+		return filteredComplain;
+	}
+
+
+
+	public void setFilteredComplain(List<Complain> filteredComplain) {
+		this.filteredComplain = filteredComplain;
+	}
+    
+
+
+	
+	
 
 	
 
 
+	
+
+
+
+	
 
 	
 

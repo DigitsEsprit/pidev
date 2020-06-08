@@ -8,9 +8,7 @@
 
 
     <ui:define name="metadata">
-        <f:metadata>
-            <f:viewParam name="flat" value="#{layoutMB.flat}" converter="javax.faces.Boolean"/>
-        </f:metadata>
+      
 
         <style type="text/css">
             .ui-grid-row .ui-grid-col-2,
@@ -43,16 +41,8 @@
     <ui:define name="body">
         <adm:breadcrumb title="Forms"/>
         <h:form>
-            <div>
-                <p:tooltip for="flat-switch" escape="false" position="top" value="Turns flat borders on, just add &lt;code&gt;ui-flat&lt;/code&gt; to a parent div."/>
-                <p:outputLabel value="Flat borders?" for="flat-switch"/>
-                <p:inputSwitch id="flat-switch" value="#{layoutMB.flat}">
-                    <p:ajax update="@form @(.ui-tabs)"/>
-                </p:inputSwitch>
-            </div>
-            
-     
-           
+             <p:chart type="pie" responsive="true" model="#{ChartComplainBean.pieChartModel}"/>
+        
 
                 <div class="ui-g-12">
                              
@@ -84,23 +74,20 @@
                             </p:column>
                             
                           
-                            
-                           
-                            
-                            
-                            
+                
                         </p:dataTable>
                         
-                        
-                        
-                        
+          
                     </p:panel>
                 </div>
 
                
-              
+             
                
         </h:form>
+        
+ 
+ 
     </ui:define>
 
    
